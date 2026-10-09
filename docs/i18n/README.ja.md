@@ -24,7 +24,7 @@ Claude Webで統合されたChatとCoworkのUIを、**クライアント側の�
 | Firefox：従来のMV3 PoC | **実機確認済み** | 有効化・再読込で分離UI、削除・再読込で統合UIへ復帰 |
 | Firefox：WXT版 | **基本動作確認済み** | 一時インストールで分離表示、削除・再読み込みで統合UIに復帰 |
 | Chrome：WXT版 | **基本動作確認済み** | 展開した拡張機能で分離表示、無効化・再読み込みで統合UIに復帰 |
-| Claude Desktop：Windows | **基本動作確認済み** | Claude 2.31226（Microsoft Store版）で、導入時に分離UI・解除後に統合UI。claude_ctrl-enter と共存 |
+| Claude Desktop：Windows | **基本動作確認済み** | Claude 2.31226（Microsoft Store版）で、導入時に分離UI・解除後に統合UI。[claude_ctrl-enter](https://github.com/zawa356/claude_ctrl-enter) 0.4 と併用可 |
 | Claude Desktop：Linux | **未確認** | 同じパッケージ。ローダーはCIでのみ確認 |
 
 CIの成功はブラウザ上の動作保証ではありません。最新状況は[GitHub Actions](https://github.com/zawa356/claude-split-ui/actions)をご覧ください。
@@ -33,8 +33,8 @@ CIの成功はブラウザ上の動作保証ではありません。最新状況
 
 両方のWXT版について（v0.1.0開発時に）Claude Web上の簡易実機テストを実施し、拡張機能を有効にするとChat / Coworkが分離表示され、削除・無効化後の再読み込みで統合UIに戻ることを確認しました。**現段階は開発者向けの手動インストール方式です。**
 
-1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.2.0)を開きます。
-2. **Assets**から、Firefoxなら `claude-split-ui-0.2.0-firefox.zip`、Chromeなら `claude-split-ui-0.2.0-chrome.zip` をダウンロードします。
+1. [最新のGitHub Release](https://github.com/zawa356/claude-split-ui/releases/latest)を開きます。
+2. **Assets**から、Firefoxなら `claude-split-ui-<版>-firefox.zip`、Chromeなら `claude-split-ui-<版>-chrome.zip` をダウンロードします。
 3. ZIPを展開し、展開先フォルダー直下に `manifest.json` と `content-scripts/` があることを確認します。
 4. **Firefox：** `about:debugging#/runtime/this-firefox` → **「一時的なアドオンを読み込む…」** → 展開済み拡張機能内の `manifest.json` を選択します。Firefoxを再起動すると一時アドオンは解除されます。
 5. **Chrome：** `chrome://extensions/` → **デベロッパーモード**を有効化 → **「パッケージ化されていない拡張機能を読み込む」** → `manifest.json` が直下にある**フォルダー**を選択します。
@@ -48,11 +48,11 @@ CIの成功はブラウザ上の動作保証ではありません。最新状況
 
 Claude本体は書き換えません。Chrome版を [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext) 経由で導入します。これは、Claude DesktopがReact DevTools用に読み込む拡張の枠（`REACT_PROFILE=1`）を複数の拡張で共有するための小さなローダーです。
 
-1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.2.0) から `claude-split-ui-0.2.0-desktop.zip` をダウンロードして展開します。
-2. **Windows：** `install.bat` を実行。**Linux：** `bash install.sh` を実行し、一度ログアウト・ログインします。
+1. [最新のGitHub Release](https://github.com/zawa356/claude-split-ui/releases/latest) から `claude-split-ui-<版>-desktop.zip` をダウンロードして展開します。
+2. **Windows：** `install.bat` を実行。**Linux：** `bash install.sh` を実行し（python3 3.8以上が必要）、一度ログアウト・ログインします。
 3. Claudeを完全に終了（タスクトレイのアイコン →「終了」）してから起動し直します。入力欄の「＋」の横にChat / Coworkの切り替えが出ます。
 
-**元に戻す：** `uninstall.bat` / `bash uninstall.sh` を実行し、Claudeを再起動します。`diagnose` は読み取りのみ、`repair` は枠を作り直します。Claudeのインストール先は変更せず、外したファイルは削除せずバックアップへ移します。現時点の確認はWindows・Claude 2.31226のみです（[記録](../research/2026-10-09-desktop-poc.md)）。
+**元に戻す：** `uninstall.bat` / `bash uninstall.sh` を実行し、Claudeを再起動します。`diagnose` は読み取りのみ、`repair` は枠を作り直します。Claudeのインストール先は変更せず、外したファイルは削除せずバックアップへ移します。同じローダーを使う他のツール（[claude_ctrl-enter](https://github.com/zawa356/claude_ctrl-enter) など）はそのまま動き続けます。現時点の確認はWindows・Claude 2.31226のみです（[記録](../research/2026-10-09-desktop-poc.md)）。
 
 WXT版で問題がある場合、旧来の[Firefox PoC](../../poc/firefox-mv3/README.md)も残しています。認証済みHARやbootstrapレスポンス原本はIssueに貼らないでください。
 
@@ -60,7 +60,7 @@ WXT版で問題がある場合、旧来の[Firefox PoC](../../poc/firefox-mv3/RE
 
 ```text
 Claude Web → 同一オリジンのbootstrap fetch
-           → ブラウザ内でレスポンスを限定的に変更
+           → ブラウザ内（またはClaude Desktopの拡張の枠）でレスポンスを限定的に変更
            → feature 1174351393: defaultValue=false / rules[].force=false
            → Chat / Coworkの分離UI
 ```
@@ -71,9 +71,10 @@ Claude Web → 同一オリジンのbootstrap fetch
 
 ## 開発者向け
 
-Node.js 22以降、WXTビルドにはpnpm 10.xを使用します。
+Node.js 22以降、WXTビルドにはpnpm 10.xを使用します。Desktop用ローダーをサブモジュール `vendor/claude-desktop-webext` に置いているため、`--recurse-submodules` を付けてcloneしてください。
 
 ```sh
+git submodule update --init
 npm run check
 npm test
 npm run build:poc
@@ -88,7 +89,7 @@ pnpm run build:firefox
 pnpm run build:chrome
 ```
 
-詳細は[開発ガイド](../DEVELOPMENT.md)をご覧ください。
+詳細は[開発ガイド](DEVELOPMENT.ja.md)をご覧ください。
 
 ## ディレクトリ構成
 
@@ -97,7 +98,8 @@ pnpm run build:chrome
 | `poc/firefox-mv3/` | 実機確認済みPoC |
 | `apps/browser-extension/` | Firefox / Chrome共通WXT版（基本動作確認済み） |
 | `packages/core/` | 共通処理とテスト |
-| `apps/desktop/` | Claude Desktop用パッケージ設定（サブモジュール `vendor/claude-desktop-webext` で導入） |
+| `apps/desktop/` | Claude Desktop用パッケージ設定（Chrome版を再利用） |
+| `vendor/claude-desktop-webext/` | Claude Desktop用の共通ローダー（[claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext)、gitサブモジュール） |
 | `docs/` | 解析資料・開発資料・翻訳 |
 
 ## ロードマップ

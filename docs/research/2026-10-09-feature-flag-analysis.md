@@ -32,8 +32,8 @@ Test environment: Firefox 157.0.1, `https://claude.ai/new`, integrated Chat/Cowo
 | Firefox MV3 extension restores split UI | High | One tested Firefox environment |
 | The mode selector routes to `/cowork/` | High | User-observed route after UI switch |
 | The historical Cowork runtime is active | **Not demonstrated** | File creation alone is insufficient |
-| Chromium MV3 supports the same early injection | **Not yet tested** | Must test |
-| Electron desktop app can use the same early hook | **Not yet tested** | Depends on Electron boot sequence |
+| Chromium MV3 supports the same early injection | **Not yet tested** at the time of this report; later verified with the WXT Chrome build ([WXT notes](wxt-migration.md)) | Must test |
+| Electron desktop app can use the same early hook | **Not yet tested** at the time of this report; later verified on Claude Desktop 2.31226 for Windows ([Desktop PoC](2026-10-09-desktop-poc.md)) | Depends on Electron boot sequence |
 | Feature flag will remain available | **Unknown** | Upstream may change silently |
 
 ## Hypotheses not elevated to facts

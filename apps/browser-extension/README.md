@@ -6,6 +6,7 @@ WXT/TypeScript implementation for Firefox MV3 and Chromium MV3. Shared narrow bo
 - Automated synthetic tests cover Chromium unpacked installation and Firefox generated-script engine behavior; they do **not** test a real Firefox add-on installation in automation.
 - More extensive Cowork functionality, account variations, upstream compatibility, and store approvals remain unverified.
 - The original reference `../../poc/firefox-mv3/` remains available.
+- The Chrome build (`.output/chrome-mv3`) is also the Claude Desktop extension. `../desktop/` packages it with the claude-desktop-webext loader.
 
 See [root README](../../README.md) for current release downloads and installation. For developer builds:
 

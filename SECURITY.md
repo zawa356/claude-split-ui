@@ -6,6 +6,13 @@ Do not submit HAR archives, bootstrap JSON captures, cookies, access tokens, aut
 
 The extension changes one client-side feature definition in memory. It does not transmit telemetry, collect user data, or store API responses.
 
-The Desktop patcher is not yet implemented. Any future patcher must back up original files, check application version compatibility, support restoration, and never redistribute proprietary application binaries.
+The Claude Desktop package does not patch Claude. It never modifies `app.asar`, the MSIX package or binaries. It installs the same extension through the [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext) loader, which:
+
+- backs up whatever it replaces,
+- refuses to overwrite a real React DevTools install or a slot owned by another tool,
+- rolls back on failure,
+- never deletes files (it moves them to backups).
+
+Proprietary Claude application files must never be added to this repository.
 
 The automated token-pattern scanner is only a heuristic; manually inspect every public change before publishing.
