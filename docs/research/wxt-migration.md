@@ -17,7 +17,7 @@ This is an A/B/A observation, not a guarantee of future compatibility.
 
 The Chrome build is also the Claude Desktop extension. `apps/desktop/` packages it with the [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext) loader ([Desktop PoC report](2026-10-09-desktop-poc.md)).
 
-## Verification ladder (status at v0.2.1)
+## Verification ladder (status at v0.2.2)
 
 1. **Done (CI):** Run pure transformation unit tests with synthetic fixture data.
 2. **Done (CI):** Build Firefox and Chrome using GitHub Actions and inspect generated manifests.
@@ -27,6 +27,7 @@ The Chrome build is also the Claude Desktop extension. `apps/desktop/` packages 
 6. **Done:** Claude Desktop 2.31226 on Windows: A/B/A through the extension slot, then installation through the loader alongside claude_ctrl-enter.
 7. **Partly (unit tests only):** Feature absent, malformed bootstrap, non-200 HTTP. Future schema drift cannot be tested in advance.
 8. **Open:** Claude Desktop on Linux.
+9. **Open:** Windows with loader v0.2.0: install and restart on a machine with only MSIX virtualized user data; classic (non-MSIX) installations.
 
 A CI green build alone does not establish real browser behavior.
 

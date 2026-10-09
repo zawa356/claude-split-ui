@@ -3,8 +3,8 @@
 <!-- Conventions: dates=ISO; V=verified-by-run by AI, U=user-verified on real app, O=observed in docs/handoff (not re-verified), H=hypothesis, ?=unknown. Paths repo-relative. Keep sections; prune stale; LOG newest-first, cap ~30 (fold older into HISTORY). -->
 
 ## META
-- updated: 2026-10-09 (Codex initial cross-repository review)
-- head_at_update: 1696cb2 (main=origin/main after fetch); this session changes investigation log only.
+- updated: 2026-10-09 (claude-opus-5-5, v0.2.2 release; took over from Codex)
+- head_at_update: 3676c8d + v0.2.2 release commit (pushed to main -> release.yml publishes v0.2.2 Latest).
 - user: zawa356; replies in Japanese. builds/releases via GitHub Actions (pnpm/WXT not used locally).
 - repo: https://github.com/zawa356/claude-split-ui ; MIT; unofficial; goal=restore split Chat/Cowork UI by client-side patch of GrowthBook flag in bootstrap response.
 - read_order: this file -> README.md -> docs/research/wxt-migration.md -> docs/research/2026-10-09-feature-flag-analysis.md -> packages/core/src/index.mjs. docs/handoff/* = historical (archived).
@@ -28,10 +28,10 @@
 | poc/firefox-mv3/ | U verified Firefox 157.0.1; regression baseline; state key __CLAUDE_SPLIT_POC_STATE__ |
 | packages/core/src/index.mjs | implemented: FEATURE_ID, STATE_KEY=__CLAUDE_SPLIT_PATCH_STATE__, isBootstrapUrl (strict UUID regex), patchBootstrap(root)->{value(structuredClone copy),matched,modifiedRules,changed} (eligible: boolean defaultValue + >=1 boolean force rule), installFetchHook(scope) (strips content-length/encoding/transfer-encoding/etag/md5/digest; mirrors url/redirected/type; logs counts only). tests packages/core/tests/patch.test.mjs (node --test) |
 | apps/browser-extension/ | WXT 0.21.4, entrypoints/claude.content.ts -> installFetchHook(window); MV3 document_start MAIN; Firefox+Chrome U basic A/B passed (per README) |
-| releases | v0.1.0, v0.1.1 prerelease (GitHub Actions). assets claude-split-ui-0.1.1-{chrome,firefox}.zip + SHA256SUMS.txt. chrome zip = manifest.json + content-scripts/claude.js (self-contained IIFE, 1792B zip) V |
+| releases | v0.2.2 Latest (loader v0.2.0); v0.2.1 (first Latest); v0.2.0, v0.1.1, v0.1.0 prerelease (GitHub Actions). per release: claude-split-ui-<ver>-{chrome,firefox,desktop}.zip + SHA256SUMS. historical: v0.1.1 assets claude-split-ui-0.1.1-{chrome,firefox}.zip + SHA256SUMS.txt. chrome zip = manifest.json + content-scripts/claude.js (self-contained IIFE, 1792B zip) V |
 | amo/ , docs/amo/ | AMO submission pipeline prepared, not submitted |
 | apps/desktop/ (was desktop-patcher) | desktop-webext.json {id claude-split-ui, order 10, source ../browser-extension/.output/chrome-mv3, tested windows 2.31226.0.0}. packaged by vendor/claude-desktop-webext/tools/package.mjs in ci.yml (artifact claude-desktop-package) + release.yml (asset claude-split-ui-<ver>-desktop.zip, in SHA256SUMS via scripts/stage-release.mjs). branch feat/desktop-webext |
-| vendor/claude-desktop-webext | git submodule (public repo, pinned locally to a774314; installation-discovery fix, not yet pushed) |
+| vendor/claude-desktop-webext | git submodule (public repo, pinned to tag v0.2.0 = e313210: installation discovery, -ClaudePath, virtual-only MSIX userData accepted) |
 | docs/research/2026-10-09-desktop-poc.md | NEW: Desktop PoC report (A/B/A, loader mechanics) |
 | docs/desktop/shared-slot-spec.md | SUPERSEDED by loader SPEC (kept for history). was DRAFT v1 shared slot spec (layout modules/<id>/module.json, claude-slot.json host registry w/ env ownership, generated manifest, order split-ui=10 ctrl-enter=50, lock+staging+swap, migration by ctrl-enter>=0.4 only, old 0.3.x sees unknown -> refuses). awaiting user review; open: generator vendoring/canonical repo, Linux, enabled flag |
 
@@ -81,12 +81,14 @@
 1. DONE: PR #8 merged (5c1bf81) by AI with user permission; v0.2.0 prerelease PUBLISHED by CI with chrome/firefox/desktop zips + SHA256SUMS (verified download, sha OK, ps1/bat CRLF). AMO still on 0.1.1 docs (user: decide later).
 2. DONE: claude_ctrl-enter v0.4.0 released (PR #1 merged 671e1a2, tag pushed by AI with user permission). pending: user runs 0.4.0 install.bat on ENV-VM + restart check.
 3. Linux real test (none available).
+4. Real install + restart of v0.2.2 desktop zip (loader v0.2.0) on the virtual-only MSIX PC; classic (non-MSIX) Windows install if one becomes available.
 
 ## OPEN_QUESTIONS
 - shared slot vs exclusive (see DESKTOP_PLAN).
 - Desktop auto-updates may change loader chunk; need version check list like sibling TestedVersions.
 
 ## LOG (newest first)
+- 2026-10-09 | claude-opus-5-5 | took over from Codex (usage limit). loader v0.2.0 released (Latest); submodule pinned to tag v0.2.0; version 0.2.2 (package.json, apps/browser-extension/package.json, wxt.config.ts); docs/releases/v0.2.2.md; wxt-migration ladder item 9 (loader v0.2.0 real install on virtual-only MSIX PC; classic installs). npm run check/test + check-docs V. pushed main -> release.yml publishes v0.2.2 Latest. ctrl-enter v0.4.2 released same session. open: real install/restart with v0.2.2 desktop zip.
 - 2026-10-09 | Codex | V: initialized and pinned shared loader to local a774314 (installation discovery, explicit path selection, MSIX virtual-only user-data fix); Desktop docs and READMEs updated. npm run check, npm test (7 core tests plus smoke/guards), check-docs PASS. Loader suite 40/40 including PS/Python byte parity PASS. No WXT rebuild or real Claude install/restart in this task; browser code unchanged. Loader commit not pushed; publish upstream before downstream gitlinks.
 - 2026-10-09 | Codex | V: read-only Windows inspection found registered/running MSIX Claude 2.31226.0.0, real %APPDATA%/Claude absent, virtual userData present. Shared loader diagnose exits 1 (incorrect Start Claude once first); install/rebuild use same blocker. O: Get-ClaudePackage only queries Appx; missing MSIX yields WARN, not refusal; classic MSI runtime support unverified. Same blocker affects both Desktop consumers (ctrl-enter ISSUE-22). No install/restart or implementation changes; fix pending.
 - 2026-10-09 | Codex | V: git fetch succeeded; main=origin/main at 1696cb2; initial worktree clean. O: reviewed three repositories, shared-slot specification and integration; consumers pin loader 35c5ab5 (v0.1.0), both submodules uninitialized here. User reports possible common bug; symptom/reproduction pending. No implementation changes, tests or real-Claude operations.
