@@ -123,3 +123,5 @@ MIT license — see [LICENSE](LICENSE). **Anthropic and Claude are trademarks of
 ---
 
 <sub>Independent research project · No official affiliation · No guarantees of compatibility</sub>
+
+Desktop development fix: the loader now discovers installation paths and accepts MSIX virtual-only user data. See [desktop instructions](apps/desktop/README.md#installation-discovery-development-version).

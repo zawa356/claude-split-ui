@@ -122,3 +122,5 @@ MITライセンス。[LICENSE](../../LICENSE)参照。**AnthropicおよびClaude
 ---
 
 <sub>独立した調査プロジェクトです。公式の関係はなく、動作保証はありません。</sub>
+
+Desktop開発版では、インストール先の検出と、MSIXの仮想化データフォルダーだけが存在する場合の導入を改善しました。[詳細](../../apps/desktop/README.md#installation-discovery-development-version)。従来版の実機動作は未確認です。

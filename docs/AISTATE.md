@@ -3,8 +3,8 @@
 <!-- Conventions: dates=ISO; V=verified-by-run by AI, U=user-verified on real app, O=observed in docs/handoff (not re-verified), H=hypothesis, ?=unknown. Paths repo-relative. Keep sections; prune stale; LOG newest-first, cap ~30 (fold older into HISTORY). -->
 
 ## META
-- updated: 2026-10-09 (session2: desktop; v0.2.1 = first Latest release)
-- head_at_update: 5886fdb (main, ff from origin) + uncommitted: docs/AISTATE.md, AGENTS.md, CLAUDE.md
+- updated: 2026-10-09 (Codex initial cross-repository review)
+- head_at_update: 1696cb2 (main=origin/main after fetch); this session changes investigation log only.
 - user: zawa356; replies in Japanese. builds/releases via GitHub Actions (pnpm/WXT not used locally).
 - repo: https://github.com/zawa356/claude-split-ui ; MIT; unofficial; goal=restore split Chat/Cowork UI by client-side patch of GrowthBook flag in bootstrap response.
 - read_order: this file -> README.md -> docs/research/wxt-migration.md -> docs/research/2026-10-09-feature-flag-analysis.md -> packages/core/src/index.mjs. docs/handoff/* = historical (archived).
@@ -31,7 +31,7 @@
 | releases | v0.1.0, v0.1.1 prerelease (GitHub Actions). assets claude-split-ui-0.1.1-{chrome,firefox}.zip + SHA256SUMS.txt. chrome zip = manifest.json + content-scripts/claude.js (self-contained IIFE, 1792B zip) V |
 | amo/ , docs/amo/ | AMO submission pipeline prepared, not submitted |
 | apps/desktop/ (was desktop-patcher) | desktop-webext.json {id claude-split-ui, order 10, source ../browser-extension/.output/chrome-mv3, tested windows 2.31226.0.0}. packaged by vendor/claude-desktop-webext/tools/package.mjs in ci.yml (artifact claude-desktop-package) + release.yml (asset claude-split-ui-<ver>-desktop.zip, in SHA256SUMS via scripts/stage-release.mjs). branch feat/desktop-webext |
-| vendor/claude-desktop-webext | git submodule (public repo, pinned to tag v0.1.0 = 35c5ab5) |
+| vendor/claude-desktop-webext | git submodule (public repo, pinned locally to a774314; installation-discovery fix, not yet pushed) |
 | docs/research/2026-10-09-desktop-poc.md | NEW: Desktop PoC report (A/B/A, loader mechanics) |
 | docs/desktop/shared-slot-spec.md | SUPERSEDED by loader SPEC (kept for history). was DRAFT v1 shared slot spec (layout modules/<id>/module.json, claude-slot.json host registry w/ env ownership, generated manifest, order split-ui=10 ctrl-enter=50, lock+staging+swap, migration by ctrl-enter>=0.4 only, old 0.3.x sees unknown -> refuses). awaiting user review; open: generator vendoring/canonical repo, Linux, enabled flag |
 
@@ -87,6 +87,9 @@
 - Desktop auto-updates may change loader chunk; need version check list like sibling TestedVersions.
 
 ## LOG (newest first)
+- 2026-10-09 | Codex | V: initialized and pinned shared loader to local a774314 (installation discovery, explicit path selection, MSIX virtual-only user-data fix); Desktop docs and READMEs updated. npm run check, npm test (7 core tests plus smoke/guards), check-docs PASS. Loader suite 40/40 including PS/Python byte parity PASS. No WXT rebuild or real Claude install/restart in this task; browser code unchanged. Loader commit not pushed; publish upstream before downstream gitlinks.
+- 2026-10-09 | Codex | V: read-only Windows inspection found registered/running MSIX Claude 2.31226.0.0, real %APPDATA%/Claude absent, virtual userData present. Shared loader diagnose exits 1 (incorrect Start Claude once first); install/rebuild use same blocker. O: Get-ClaudePackage only queries Appx; missing MSIX yields WARN, not refusal; classic MSI runtime support unverified. Same blocker affects both Desktop consumers (ctrl-enter ISSUE-22). No install/restart or implementation changes; fix pending.
+- 2026-10-09 | Codex | V: git fetch succeeded; main=origin/main at 1696cb2; initial worktree clean. O: reviewed three repositories, shared-slot specification and integration; consumers pin loader 35c5ab5 (v0.1.0), both submodules uninitialized here. User reports possible common bug; symptom/reproduction pending. No implementation changes, tests or real-Claude operations.
 - 2026-10-09 | claude-opus-5-5 | PR #9 merged (a17c4d4) -> v0.2.1 published as Latest (non-prerelease) with chrome/firefox/desktop zips; sha verified. Latest everywhere: split-ui v0.2.1, ctrl-enter v0.4.1, loader v0.1.0. future releases: bump 3 version fields + docs/releases/v<ver>.md, push to main.
 - 2026-10-09 | claude-opus-5-5 | session2o: user verified ctrl-enter 0.4.0 install [U]; asked to refresh all docs + Latest releases in all repos. split-ui: release.yml now publishes non-prerelease + make_latest; v0.2.1 docs refresh (README latest links + <version>, SECURITY, DEVELOPMENT en/ja w/ submodule+desktop+release steps, PRIVACY en/ja desktop section, CONTRIBUTING, core/desktop/browser READMEs, wxt-migration ladder, feature-flag table follow-ups, AMO version wording), loader pinned v0.1.0. loader v0.1.0 released (Latest). ctrl-enter v0.4.1 released (Latest, notes polished).
 - 2026-10-09 | claude-opus-5-5 | session2n: user permitted merge+release. merged PR #8 -> v0.2.0 prerelease published; merged ctrl-enter PR #1 + tag v0.4.0 -> released. note: Windows PowerShell 5.1 has no && (gave user a bash-style command by mistake; use ; / if ($?) or separate lines).
