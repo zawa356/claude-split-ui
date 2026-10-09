@@ -1,0 +1,78 @@
+name: Firefox Add-ons (AMO) verification and submission
+
+on:
+  push:
+    branches: [main, 'feat/**']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type SUBMIT to send to Mozilla AMO (listed channel)'
+        required: true
+        default: 'DRY_RUN'
+
+permissions:
+  contents: read
+
+jobs:
+  amo:
+    name: AMO build, lint and optional listed submission
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install workspace dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Build Firefox MV3 package
+        run: |
+          pnpm run build:firefox
+          node scripts/verify-wxt-build.mjs firefox
+      - name: Mozilla extension linter
+        run: npx --yes web-ext@10.5.0 lint --source-dir apps/browser-extension/.output/firefox-mv3
+      - name: Package reviewer source and build instructions
+        run: |
+          mkdir -p dist/amo
+          git archive --format=zip --output=dist/amo/claude-split-ui-reviewer-source.zip HEAD
+          test -f pnpm-lock.yaml
+          zip -q -u dist/amo/claude-split-ui-reviewer-source.zip pnpm-lock.yaml
+          unzip -t dist/amo/claude-split-ui-reviewer-source.zip
+      - name: Save validation output (no signing or publication)
+        uses: actions/upload-artifact@v4
+        with:
+          name: amo-firefox-review-package
+          path: |
+            apps/browser-extension/.output/firefox-mv3/
+            dist/amo/claude-split-ui-reviewer-source.zip
+            amo/metadata.json
+          include-hidden-files: true
+          if-no-files-found: error
+
+      # Never submit on a push, PR, or an unconfirmed workflow dispatch.
+      # GitHub Actions secrets must be configured by the repository owner.
+      - name: Submit Firefox extension to Mozilla AMO (Listed)
+        if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.confirmation == 'SUBMIT' }}
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+          WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: |
+          if [ -z "$WEB_EXT_API_KEY" ] || [ -z "$WEB_EXT_API_SECRET" ]; then
+            echo "::error::Set AMO_JWT_ISSUER and AMO_JWT_SECRET as GitHub Actions repository secrets first."
+            exit 1
+          fi
+          npx --yes web-ext@10.5.0 sign \
+            --source-dir apps/browser-extension/.output/firefox-mv3 \
+            --artifacts-dir dist/amo \
+            --channel listed \
+            --amo-metadata amo/metadata.json \
+            --upload-source-code dist/amo/claude-split-ui-reviewer-source.zip \
+            --no-input
+
+      - name: AMO submission note
+        if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.confirmation == 'SUBMIT' }}
+        run: echo "AMO submission was requested. Check the Mozilla Developer Hub for approval/review status; successful submission is not proof of publication."

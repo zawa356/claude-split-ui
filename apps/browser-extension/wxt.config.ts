@@ -10,7 +10,8 @@ export default defineConfig({
     ...(browser === 'firefox' ? {
       browser_specific_settings: {
         gecko: {
-          id: 'claude-split-ui@example.invalid',
+          id: '@claude-split-ui-zawa356',
+          data_collection_permissions: { required: ['none'] },
           strict_min_version: '128.0'
         }
       }

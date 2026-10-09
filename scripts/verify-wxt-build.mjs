@@ -24,6 +24,7 @@ for (const name of script.js) {
 assert.deepEqual(manifest.host_permissions ?? [], [], 'unexpected host permissions');
 assert.deepEqual(manifest.permissions ?? [], [], 'unexpected extension permissions');
 if (browser === 'firefox') {
-  assert.equal(manifest.browser_specific_settings?.gecko?.id, 'claude-split-ui@example.invalid');
+  assert.equal(manifest.browser_specific_settings?.gecko?.id, '@claude-split-ui-zawa356');
+  assert.deepEqual(manifest.browser_specific_settings?.gecko?.data_collection_permissions, { required: ['none'] });
 }
 console.log(`${browser} MV3 manifest verified`);
