@@ -9,7 +9,7 @@ This archive contains the publicly available source of the extension; it exclude
 - pnpm: 10.15.0
 - WXT: 0.21.4
 - TypeScript: 5.9.3
-- Extension version: 0.1.1 for the initial AMO submission candidate
+- Extension version: the version in `apps/browser-extension/package.json` (identical in the submitted `manifest.json`)
 
 The included pnpm-lock.yaml is generated during the submission CI job and added to this reviewer source archive. It captures the exact dependency graph used for that submission. The repository itself does not currently commit a lockfile; build reproducibility across future dependency resolutions is not guaranteed.
 

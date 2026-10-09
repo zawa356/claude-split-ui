@@ -3,7 +3,7 @@
 <!-- Conventions: dates=ISO; V=verified-by-run by AI, U=user-verified on real app, O=observed in docs/handoff (not re-verified), H=hypothesis, ?=unknown. Paths repo-relative. Keep sections; prune stale; LOG newest-first, cap ~30 (fold older into HISTORY). -->
 
 ## META
-- updated: 2026-10-09 (session2: desktop, released v0.2.0)
+- updated: 2026-10-09 (session2: desktop; v0.2.1 = first Latest release)
 - head_at_update: 5886fdb (main, ff from origin) + uncommitted: docs/AISTATE.md, AGENTS.md, CLAUDE.md
 - user: zawa356; replies in Japanese. builds/releases via GitHub Actions (pnpm/WXT not used locally).
 - repo: https://github.com/zawa356/claude-split-ui ; MIT; unofficial; goal=restore split Chat/Cowork UI by client-side patch of GrowthBook flag in bootstrap response.
@@ -31,7 +31,7 @@
 | releases | v0.1.0, v0.1.1 prerelease (GitHub Actions). assets claude-split-ui-0.1.1-{chrome,firefox}.zip + SHA256SUMS.txt. chrome zip = manifest.json + content-scripts/claude.js (self-contained IIFE, 1792B zip) V |
 | amo/ , docs/amo/ | AMO submission pipeline prepared, not submitted |
 | apps/desktop/ (was desktop-patcher) | desktop-webext.json {id claude-split-ui, order 10, source ../browser-extension/.output/chrome-mv3, tested windows 2.31226.0.0}. packaged by vendor/claude-desktop-webext/tools/package.mjs in ci.yml (artifact claude-desktop-package) + release.yml (asset claude-split-ui-<ver>-desktop.zip, in SHA256SUMS via scripts/stage-release.mjs). branch feat/desktop-webext |
-| vendor/claude-desktop-webext | git submodule (public repo, b46a222) |
+| vendor/claude-desktop-webext | git submodule (public repo, pinned to tag v0.1.0 = 35c5ab5) |
 | docs/research/2026-10-09-desktop-poc.md | NEW: Desktop PoC report (A/B/A, loader mechanics) |
 | docs/desktop/shared-slot-spec.md | SUPERSEDED by loader SPEC (kept for history). was DRAFT v1 shared slot spec (layout modules/<id>/module.json, claude-slot.json host registry w/ env ownership, generated manifest, order split-ui=10 ctrl-enter=50, lock+staging+swap, migration by ctrl-enter>=0.4 only, old 0.3.x sees unknown -> refuses). awaiting user review; open: generator vendoring/canonical repo, Linux, enabled flag |
 
@@ -87,6 +87,7 @@
 - Desktop auto-updates may change loader chunk; need version check list like sibling TestedVersions.
 
 ## LOG (newest first)
+- 2026-10-09 | claude-opus-5-5 | session2o: user verified ctrl-enter 0.4.0 install [U]; asked to refresh all docs + Latest releases in all repos. split-ui: release.yml now publishes non-prerelease + make_latest; v0.2.1 docs refresh (README latest links + <version>, SECURITY, DEVELOPMENT en/ja w/ submodule+desktop+release steps, PRIVACY en/ja desktop section, CONTRIBUTING, core/desktop/browser READMEs, wxt-migration ladder, feature-flag table follow-ups, AMO version wording), loader pinned v0.1.0. loader v0.1.0 released (Latest). ctrl-enter v0.4.1 released (Latest, notes polished).
 - 2026-10-09 | claude-opus-5-5 | session2n: user permitted merge+release. merged PR #8 -> v0.2.0 prerelease published; merged ctrl-enter PR #1 + tag v0.4.0 -> released. note: Windows PowerShell 5.1 has no && (gave user a bash-style command by mistake; use ; / if ($?) or separate lines).
 - 2026-10-09 | claude-opus-5-5 | session2m: bumped to 0.2.0 (user) + docs/releases/v0.2.0.md; submodule -> loader b46a222 (webext.sh checks python3 actually runs; Windows Store alias). ctrl-enter 0.4.0 PR zawa356/claude_ctrl-enter#1 opened from this session (loader-based install/migration).
 - 2026-10-09 | claude-opus-5-5 | session2l: user verified loader-based install on VM. branch feat/desktop-webext: submodule, apps/desktop config, CI/release packaging, README/FAQ en+ja Desktop sections, superseded notes. npm test + check-docs pass.

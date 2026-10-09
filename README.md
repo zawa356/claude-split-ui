@@ -24,7 +24,7 @@ Claude's web interface changed from separate **Chat** and **Cowork** modes to a 
 | Firefox — original MV3 PoC | **Manually verified** | Split selector appears after installing and reloading; unified UI returns after removing and reloading |
 | Firefox — WXT extension | **Basic manual test passed** | Temporary installation restored split UI; removal and reload restored unified UI |
 | Chrome — WXT extension | **Basic manual test passed** | Unpacked installation restored split UI; disabling and reload restored unified UI |
-| Claude Desktop — Windows | **Basic manual test passed** | Claude 2.31226 (Microsoft Store): split UI with the package installed, unified UI after removal; coexists with claude_ctrl-enter |
+| Claude Desktop — Windows | **Basic manual test passed** | Claude 2.31226 (Microsoft Store): split UI with the package installed, unified UI after removal; works alongside [claude_ctrl-enter](https://github.com/zawa356/claude_ctrl-enter) 0.4 |
 | Claude Desktop — Linux | **Untested** | Same package; loader tested in CI only |
 
 > [!NOTE]
@@ -34,8 +34,8 @@ Claude's web interface changed from separate **Chat** and **Cowork** modes to a 
 
 Both WXT builds (originally tested in the v0.1.0 development cycle) passed a basic manual test on Claude Web: the Chat / Cowork selector appeared with the extension enabled, and the unified interface returned when it was removed/disabled and the page was reloaded. **These are developer/test installations, not signed store releases.**
 
-1. Open [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.2.0).
-2. Under **Assets**, download `claude-split-ui-0.2.0-firefox.zip` or `claude-split-ui-0.2.0-chrome.zip` for your browser.
+1. Open the [latest GitHub Release](https://github.com/zawa356/claude-split-ui/releases/latest).
+2. Under **Assets**, download `claude-split-ui-<version>-firefox.zip` or `claude-split-ui-<version>-chrome.zip` for your browser.
 3. **Extract the ZIP** into a folder. The folder must contain `manifest.json` and `content-scripts/` at its top level.
 4. **Firefox:** open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → choose `manifest.json` in the extracted extension folder. Temporary add-ons disappear after Firefox restarts.
 5. **Chrome:** open `chrome://extensions/` → enable **Developer mode** → **Load unpacked** → select the extracted extension **folder** containing `manifest.json`.
@@ -49,11 +49,11 @@ Both WXT builds (originally tested in the v0.1.0 development cycle) passed a bas
 
 Claude Desktop is not patched. The Chrome build is installed through [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext), a small loader that Claude Desktop picks up via its React DevTools extension slot (`REACT_PROFILE=1`) and that lets several extensions share that slot.
 
-1. Download `claude-split-ui-0.2.0-desktop.zip` from [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.2.0) and extract it.
-2. **Windows:** run `install.bat`. **Linux:** run `bash install.sh`, then log out and in once.
+1. Download `claude-split-ui-<version>-desktop.zip` from the [latest GitHub Release](https://github.com/zawa356/claude-split-ui/releases/latest) and extract it.
+2. **Windows:** run `install.bat`. **Linux:** run `bash install.sh` (needs python3 ≥ 3.8), then log out and in once.
 3. Quit Claude completely (tray icon → Quit) and start it again. The Chat / Cowork selector appears next to `+` in the composer.
 
-**Undo:** run `uninstall.bat` / `bash uninstall.sh` and restart Claude. `diagnose` is read-only; `repair` regenerates the slot. Nothing in Claude's installation is modified, and removed files are moved to backups rather than deleted. Tested only on Windows with Claude 2.31226 so far ([report](docs/research/2026-10-09-desktop-poc.md)).
+**Undo:** run `uninstall.bat` / `bash uninstall.sh` and restart Claude. `diagnose` is read-only; `repair` regenerates the slot. Nothing in Claude's installation is modified, and removed files are moved to backups rather than deleted. Other tools built on the same loader, such as [claude_ctrl-enter](https://github.com/zawa356/claude_ctrl-enter), keep working. Tested only on Windows with Claude 2.31226 so far ([report](docs/research/2026-10-09-desktop-poc.md)).
 
 **Reference implementation:** If WXT fails, the earlier [Firefox PoC](poc/firefox-mv3/README.md) is retained for diagnostics. Never post authenticated HAR files or bootstrap payloads to GitHub issues.
 
@@ -61,7 +61,7 @@ Claude Desktop is not patched. The Chrome build is installed through [claude-des
 
 ```text
 Claude Web → same-origin bootstrap fetch
-           → local response wrapper (in your browser)
+           → local response wrapper (in your browser, or in Claude Desktop via the extension slot)
            → feature 1174351393: defaultValue=false; Boolean rules[].force=false
            → original page renders with split Chat / Cowork selector
 ```
@@ -72,9 +72,10 @@ Only a matching bootstrap response is considered. Other fetches and unknown resp
 
 ## For developers
 
-**Requirements:** Node.js 22+, pnpm 10.x for WXT builds.
+**Requirements:** Node.js 22+, pnpm 10.x for WXT builds. Clone with `--recurse-submodules`, because the Desktop loader is the submodule `vendor/claude-desktop-webext`.
 
 ```sh
+git submodule update --init
 npm run check
 npm test
 npm run build:poc
@@ -98,7 +99,8 @@ See [Development](docs/DEVELOPMENT.md) for build outputs, verification steps and
 | `poc/firefox-mv3/` | Manually verified reference PoC |
 | `apps/browser-extension/` | Shared WXT Firefox / Chrome implementation, basic manual A/B/A test passed |
 | `packages/core/` | Bootstrap transformation and tests |
-| `apps/desktop/` | Claude Desktop package config (installed with the `vendor/claude-desktop-webext` submodule) |
+| `apps/desktop/` | Claude Desktop package config (reuses the Chrome build) |
+| `vendor/claude-desktop-webext/` | Shared Claude Desktop loader ([claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext), git submodule) |
 | `docs/` | Research, troubleshooting, development and translations |
 
 ## Roadmap

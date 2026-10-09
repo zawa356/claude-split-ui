@@ -13,9 +13,10 @@ Thank you for helping improve this experimental project.
 
 ## Development
 
-Use Node.js 22+ and pnpm 10.x for WXT builds. See [Development guide](docs/DEVELOPMENT.md).
+Use Node.js 22+ and pnpm 10.x for WXT builds. Clone with `--recurse-submodules`, because the Claude Desktop loader is the submodule `vendor/claude-desktop-webext`. Fix loader issues upstream in [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext). See the [Development guide](docs/DEVELOPMENT.md).
 
 ```sh
+git submodule update --init
 npm run check
 npm test
 npm run build:poc
@@ -27,7 +28,7 @@ pnpm run build:chrome
 
 ## Pull requests
 
-Describe the motivation, affected browsers, verification method and rollback. Preserve the original Firefox PoC as a known-good baseline. When changing public behavior, update both README translations and the FAQ as appropriate. WXT Firefox and Chrome have passed a **basic real-browser split/restore smoke test**; do not overstate this as full-feature validation or perpetual compatibility.
+Describe the motivation, the affected targets (Firefox, Chrome, Claude Desktop), the verification method and the rollback. Preserve the original Firefox PoC as a known-good baseline. When changing public behavior, update both README translations and the FAQ as appropriate. WXT Firefox and Chrome have passed a **basic real-browser split/restore smoke test**; do not overstate this as full-feature validation or perpetual compatibility.
 
 Use synthetic data for regression tests. The project does not accept proprietary Claude application archives, copied vendor source, or secrets.
 
