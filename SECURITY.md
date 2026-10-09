@@ -1,9 +1,11 @@
-# Security considerations
+# Security and privacy
 
-- Only load this experimental extension on a Claude account you control.
-- Never upload or commit full `/app_start` JSON responses, HAR captures, cookies, JWTs, access tokens, or chat content.
-- The page's `MAIN` world is untrusted: no privileged browser-extension APIs or secrets should be exposed there.
-- The patch should be restricted to a same-origin `/edge-api/bootstrap/.../app_start` response and should fail open (pass through the unmodified original) if the schema is unknown.
-- A stored HAR or fixed JSON override is **not** an acceptable production implementation. A dynamic response transformation avoids pinning stale account/session data.
-- A future Electron patcher must back up the original ASAR, check compatibility before patching, support rollback, and never redistribute Anthropic application binaries.
-- Report security issues through a private channel to the repository maintainers; do not post live tokens in public issues.
+This project is unofficial and experimental. It does not bypass authentication, subscription entitlements, or server-side access controls.
+
+Do not submit HAR archives, bootstrap JSON captures, cookies, access tokens, authorization headers, session identifiers, email addresses, account IDs, or user content to issues or pull requests.
+
+The extension changes one client-side feature definition in memory. It does not transmit telemetry, collect user data, or store API responses.
+
+The Desktop patcher is not yet implemented. Any future patcher must back up original files, check application version compatibility, support restoration, and never redistribute proprietary application binaries.
+
+The automated token-pattern scanner is only a heuristic; manually inspect every public change before publishing.

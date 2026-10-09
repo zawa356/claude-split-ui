@@ -1,48 +1,67 @@
-# Claude Split UI (unofficial)
+<div align="center">
 
-> **Experimental / Not affiliated with or endorsed by Anthropic.**
->
-> Restores the separate **Chat / Cowork** interface on supported versions of Claude by locally adjusting a client-side bootstrap feature flag. It does **not** grant new account entitlements or restore historical local runtimes.
+# Claude Split UI
 
-**Status (2026-10-09): Firefox MV3 proof of concept tested successfully.** Chrome, WXT, and the Electron desktop patcher are **not yet implemented or validated** in this repository.
+**Bring back the separate Chat / Cowork interface — experimentally.**
 
-## Confirmed result
+[English](README.md) · [日本語](docs/i18n/README.ja.md)
 
-In a tested Claude Web account, setting the GrowthBook feature definition `1174351393` to `defaultValue=false` and its Boolean `rules[].force=false` in the `/edge-api/bootstrap/.../app_start` response restored the separate Chat / Cowork selector. A/B/A/B manual tests confirmed repeatability. The Firefox MV3 extension reproduced the split view without using DevTools Network Override; removing it and refreshing returned to the unified UI.
+[Quick start](#quick-start--firefox-poc) · [Status](#project-status) · [FAQ](docs/FAQ.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
-A basic file-generation task was completed after selecting Cowork, but this does **not** prove that any older local execution environment has been restored.
+> [!WARNING]
+> **Unofficial experimental project.** Not affiliated with, sponsored by, or endorsed by Anthropic. The underlying feature is undocumented and may stop working at any time.
 
-## Try the verified Firefox PoC
+</div>
 
-1. Download or clone the repository.
-2. In Firefox, go to `about:debugging#/runtime/this-firefox`.
-3. Choose **Load Temporary Add-on** and select `poc/firefox-mv3/manifest.json`.
-4. Open `https://claude.ai/new`, reload, and check for a separate Chat / Cowork selector.
-5. To revert, remove the temporary add-on and reload Claude.
+## Why this exists
 
-No account response, session token, chat message, or authentication data is stored or transmitted by the PoC. It does not make additional network requests. It only modifies matching fetch responses in the local page context.
+Claude's web interface changed from separate **Chat** and **Cowork** modes to a unified interface. This project investigates a narrow, reversible **client-side** change that restores the separate selector in tested versions. It does **not** unlock subscriptions, bypass authorization, or recreate desktop-only capabilities.
 
-**Important:** The PoC runs in the page's `MAIN` world and is not security-hardened. Inspect the source before use. The upstream implementation may change at any time, and the feature flag may cease to exist.
+## Project status
 
-## Repository structure
+| Target | Status | What is actually verified |
+| :-- | :-- | :-- |
+| Firefox — original MV3 PoC | **Manually verified** | Split selector appears after installing and reloading; unified UI returns after removing and reloading |
+| Firefox — WXT extension | **Experimental** | Builds in CI; browser A/B/A validation pending |
+| Chrome — WXT extension | **Experimental** | Builds in CI; browser A/B/A validation pending |
+| Claude Desktop — Electron | **Planned** | No usable patcher or release |
 
-| Directory | Purpose | Status |
-|---|---|---|
-| `poc/firefox-mv3/` | Original, tested baseline WebExtension | **Tested on Firefox 157.0.1** |
-| `apps/browser-extension/` | WXT-based Firefox/Chromium extension | Planned |
-| `apps/desktop-patcher/` | Claude Desktop Electron/ASAR patcher | Planned |
-| `packages/core/` | Shared response transformation and tests | Planned |
-| `docs/research/` | Reproducible technical findings | Initial report |
-| `docs/handoff/` | Instructions for coding agents | Initial handoff |
-| `.github/workflows/` | Tests, ZIP artifacts, prerelease packaging | Configured for verified PoC only |
+> [!NOTE]
+> A successful CI build is **not** proof of runtime compatibility. Check the [Actions page](https://github.com/zawa356/claude-split-ui/actions) for the latest result.
 
-## CI / release
+## Quick start — Firefox PoC
 
-- Push and PR: Node syntax checks, PoC smoke tests, manifest checks, sensitive-file checks, and Firefox PoC ZIP packaging.
-- Tags `v*`: repeat checks, generate a checksum, and publish a **prerelease** ZIP through GitHub Releases.
-- These checks do **not** imply browser runtime validation. Chrome and Desktop artifacts are intentionally **not** published yet.
+**Requirements:** Firefox 128+ (manually tested with Firefox 157.0.1), access to Claude Web, and a local checkout or extracted source ZIP. No Node.js is needed for this PoC.
 
-For the current proof of concept:
+1. [Download the repository ZIP](https://github.com/zawa356/claude-split-ui/archive/refs/heads/main.zip) and extract it, or clone this repository.
+2. In Firefox, open `about:debugging#/runtime/this-firefox`.
+3. Click **Load Temporary Add-on…** and select `poc/firefox-mv3/manifest.json`.
+4. Open [Claude Web](https://claude.ai/new) and reload the page.
+5. Look for the separate **Chat / Cowork** selector. The exact appearance may differ by account and upstream release.
+
+**Undo:** Remove the temporary add-on from `about:debugging` and reload Claude. The source files remain untouched.
+
+**If it does not work:** Confirm that a Firefox DevTools Network Override is not active, reload, and consult [Troubleshooting](docs/FAQ.md#troubleshooting). Never upload a full HAR, raw bootstrap response, cookie, or authenticated request to an issue.
+
+> [!IMPORTANT]
+> This PoC executes in the page's MAIN world and is intended for informed testers. Inspect the code before loading it. Temporary add-ons disappear when Firefox is restarted.
+
+## How it works
+
+```text
+Claude Web → same-origin bootstrap fetch
+           → local response wrapper (in your browser)
+           → feature 1174351393: defaultValue=false; Boolean rules[].force=false
+           → original page renders with split Chat / Cowork selector
+```
+
+Only a matching bootstrap response is considered. Other fetches and unknown response formats pass through. The project does not collect telemetry, transmit response bodies, or save authentication material.
+
+[Technical notes](docs/research/wxt-migration.md) · [Privacy policy](docs/PRIVACY.md)
+
+## For developers
+
+**Requirements:** Node.js 22+, pnpm 10.x for WXT builds.
 
 ```sh
 npm run check
@@ -50,23 +69,43 @@ npm test
 npm run build:poc
 ```
 
-Node.js 22+ is required. The initial PoC build is dependency-free; a `pnpm-workspace.yaml` is in place for future WXT development.
+To build the **unverified** WXT variants:
 
-## Responsible publication
+```sh
+corepack enable
+pnpm install --no-frozen-lockfile
+pnpm run build:firefox
+pnpm run build:chrome
+```
 
-**Never commit** a full HAR capture, `app_start` response, authenticated requests, JWTs, cookies, device IDs, or account-specific data. These may include credentials or private conversations. Keep local overrides outside the repository. Relevant findings are documented without authentic account identifiers.
+See [Development](docs/DEVELOPMENT.md) for build outputs, verification steps and limitations.
 
-The project only modifies behavior in the user's own client. It does not attempt to bypass server-side authorization or license checks.
+## Project layout
+
+| Path | Purpose |
+| :-- | :-- |
+| `poc/firefox-mv3/` | Manually verified reference PoC |
+| `apps/browser-extension/` | Shared WXT Firefox / Chrome implementation, not yet browser-validated |
+| `packages/core/` | Bootstrap transformation and tests |
+| `apps/desktop-patcher/` | Future Electron patcher |
+| `docs/` | Research, troubleshooting, development and translations |
 
 ## Roadmap
 
-- [x] Identify and reproduce the feature flag's effect on split UI.
-- [x] Verify Firefox MV3 content script interception of bootstrap response.
-- [ ] Extract a tested, pure transformation function in `packages/core`.
-- [ ] Implement WXT extension and verify **both** Firefox and Chrome (`document_start`, `MAIN` world timing).
-- [ ] Add Playwright/browser integration tests where feasible.
-- [ ] Implement backup/restore-safe Desktop patcher, with update compatibility checks.
+- [x] Identify the relevant bootstrap feature and verify the UI difference
+- [x] Verify a reversible Firefox MV3 PoC
+- [x] Implement shared core and WXT build candidates
+- [ ] Validate WXT Firefox in a real browser
+- [ ] Validate WXT Chrome in a real browser
+- [ ] Add browser-level regression tests
+- [ ] Design, implement and validate a reversible Desktop patcher
 
-## License
+## Community and license
 
-MIT. See [LICENSE](LICENSE).
+Contributions and reproducible reports are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), and [SECURITY.md](SECURITY.md) before posting.
+
+MIT license — see [LICENSE](LICENSE). **Anthropic and Claude are trademarks of their respective owners.**
+
+---
+
+<sub>Independent research project · No official affiliation · No guarantees of compatibility</sub>

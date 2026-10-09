@@ -1,0 +1,19 @@
+import { defineConfig } from 'wxt';
+
+// No background worker, cookie permission, remote scripts or telemetry.
+export default defineConfig({
+  srcDir: '.',
+  manifest: ({ browser }) => ({
+    name: 'Claude Split UI (Unofficial)',
+    description: 'Experimental restoration of Claude Chat/Cowork split UI. No telemetry.',
+    version: '0.1.0',
+    ...(browser === 'firefox' ? {
+      browser_specific_settings: {
+        gecko: {
+          id: 'claude-split-ui@example.invalid',
+          strict_min_version: '128.0'
+        }
+      }
+    } : {})
+  })
+});
