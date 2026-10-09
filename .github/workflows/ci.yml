@@ -1,0 +1,34 @@
+name: CI (tested Firefox PoC only)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  firefox-poc:
+    name: Validate and package Firefox PoC
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check syntax
+        run: npm run check
+      - name: Unit and metadata tests
+        run: npm test
+      - name: Package tested Firefox PoC
+        run: npm run build:poc
+      - name: Validate ZIP integrity
+        run: unzip -t dist/claude-split-ui-firefox-poc.zip
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-split-ui-firefox-poc
+          path: dist/claude-split-ui-firefox-poc.zip
+          if-no-files-found: error

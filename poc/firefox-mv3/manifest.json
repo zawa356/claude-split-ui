@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Claude Split UI - Bootstrap PoC",
+  "version": "0.1.0",
+  "description": "Local proof of concept: modify one Claude bootstrap feature flag in memory. No network capture, storage or telemetry.",
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/*"],
+      "js": ["bootstrap-hook.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "claude-split-bootstrap-poc@example.invalid"
+    }
+  }
+}

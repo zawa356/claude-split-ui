@@ -1,0 +1,32 @@
+# Install/build outputs
+node_modules/
+.output/
+.wxt/
+dist/
+coverage/
+*.zip
+*.asar
+*.asar.unpacked/
+
+# Local secrets, authentication data, and captured traffic
+*.har
+*.har.gz
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+cookies*.json
+*app_start*.json
+*bootstrap*response*.json
+*session*dump*.json
+local-captures/
+secrets/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
