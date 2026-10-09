@@ -1,8 +1,8 @@
-name: CI (tested Firefox PoC only)
+name: CI - Firefox baseline and WXT builds (experimental)
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'feat/**']
   pull_request:
   workflow_dispatch:
 
@@ -10,25 +10,52 @@ permissions:
   contents: read
 
 jobs:
-  firefox-poc:
-    name: Validate and package Firefox PoC
+  verified-poc:
+    name: Test and package proven Firefox PoC
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check syntax
-        run: npm run check
-      - name: Unit and metadata tests
-        run: npm test
-      - name: Package tested Firefox PoC
-        run: npm run build:poc
-      - name: Validate ZIP integrity
-        run: unzip -t dist/claude-split-ui-firefox-poc.zip
-      - name: Upload build artifact
+      - run: npm run check
+      - run: npm test
+      - run: npm run build:poc
+      - run: unzip -t dist/claude-split-ui-firefox-poc.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: firefox-verified-poc
+          path: dist/claude-split-ui-firefox-poc.zip
+          if-no-files-found: error
+
+  wxt-build:
+    name: Build WXT (${{ matrix.browser }} MV3) - runtime unverified
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install workspace dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Typecheck
+        run: pnpm --filter @claude-split-ui/browser-extension typecheck
+      - name: Bundle WXT
+        run: pnpm run build:${{ matrix.browser }}
+      - name: Inspect generated manifest
+        run: node scripts/verify-wxt-build.mjs ${{ matrix.browser }}
+      - name: ZIP build
+        run: pnpm run zip:${{ matrix.browser }}
+      - name: Upload WXT build ZIP (NOT browser-tested)
         uses: actions/upload-artifact@v4
         with:
-          name: claude-split-ui-firefox-poc
-          path: dist/claude-split-ui-firefox-poc.zip
+          name: wxt-${{ matrix.browser }}-mv3-unverified
+          path: apps/browser-extension/.output/*-${{ matrix.browser }}.zip
           if-no-files-found: error
