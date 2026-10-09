@@ -23,4 +23,12 @@ for (const browser of ['firefox', 'chrome']) {
   sums.push(sum + '  ' + filename);
   console.log(browser + ' => ' + filename + ' (SHA256: ' + sum + ')');
 }
+// Claude Desktop package, zipped by the workflow from vendor/claude-desktop-webext/tools/package.mjs output.
+const desktopName = 'claude-split-ui-' + version + '-desktop.zip';
+const desktopSource = join(root, 'dist/desktop', desktopName);
+assert.ok(existsSync(desktopSource), 'Missing Desktop ZIP: ' + desktopSource);
+copyFileSync(desktopSource, join(dest, desktopName));
+const desktopSum = createHash('sha256').update(readFileSync(join(dest, desktopName))).digest('hex');
+sums.push(desktopSum + '  ' + desktopName);
+console.log('desktop => ' + desktopName + ' (SHA256: ' + desktopSum + ')');
 writeFileSync(join(dest, 'SHA256SUMS.txt'), sums.join('\n') + '\n');

@@ -12,7 +12,7 @@ No. It is an independent, experimental research project.
 Yes, the WXT Chrome build passed a basic manual split/restore test using **Load unpacked**. It is not yet available from the Chrome Web Store.
 
 ## Is Claude Desktop supported?
-No. A reversible Electron patcher is only planned.
+Yes, on Windows (basic manual test with Claude 2.31226). It is installed with the `claude-split-ui-<version>-desktop.zip` package through the [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext) loader; Claude itself is not modified. Linux uses the same package but is untested.
 
 ## Troubleshooting
 

@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - uses: pnpm/action-setup@v4
         with:
           version: 10.15.0
@@ -45,12 +47,18 @@ jobs:
           pnpm run zip:chrome
           node scripts/verify-wxt-build.mjs firefox
           node scripts/verify-wxt-build.mjs chrome
+      - name: Package Claude Desktop (claude-desktop-webext + Chrome build)
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          node vendor/claude-desktop-webext/tools/package.mjs --config apps/desktop/desktop-webext.json --extension apps/browser-extension/.output/chrome-mv3 --out "dist/desktop/claude-split-ui-$V-desktop"
+          (cd dist/desktop && zip -qr "claude-split-ui-$V-desktop.zip" "claude-split-ui-$V-desktop")
       - name: Verify and stage distributable archives
         run: |
           node scripts/stage-release.mjs
           cd dist/release
           unzip -t "claude-split-ui-${{ steps.version.outputs.version }}-firefox.zip"
           unzip -t "claude-split-ui-${{ steps.version.outputs.version }}-chrome.zip"
+          unzip -t "claude-split-ui-${{ steps.version.outputs.version }}-desktop.zip"
           sha256sum -c SHA256SUMS.txt
       - name: Upload temporary artifacts
         uses: actions/upload-artifact@v4
@@ -82,5 +90,6 @@ jobs:
           files: |
             dist/release/claude-split-ui-${{ steps.version.outputs.version }}-firefox.zip
             dist/release/claude-split-ui-${{ steps.version.outputs.version }}-chrome.zip
+            dist/release/claude-split-ui-${{ steps.version.outputs.version }}-desktop.zip
             dist/release/SHA256SUMS.txt
           fail_on_unmatched_files: true

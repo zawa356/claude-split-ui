@@ -51,6 +51,18 @@ jobs:
         run: pnpm run build:${{ matrix.browser }}
       - name: Inspect generated manifest
         run: node scripts/verify-wxt-build.mjs ${{ matrix.browser }}
+      - name: Package Claude Desktop from the Chrome build
+        if: matrix.browser == 'chrome'
+        run: |
+          git submodule update --init vendor/claude-desktop-webext
+          node vendor/claude-desktop-webext/tools/package.mjs --config apps/desktop/desktop-webext.json --extension apps/browser-extension/.output/chrome-mv3 --out dist/desktop/claude-split-ui-desktop
+      - name: Upload Claude Desktop package
+        if: matrix.browser == 'chrome'
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-desktop-package
+          path: dist/desktop/
+          if-no-files-found: error
       - name: ZIP build
         run: pnpm run zip:${{ matrix.browser }}
       - name: Upload WXT build ZIP (MANUALLY BASIC TESTED)
