@@ -2,6 +2,8 @@ name: Publish browser extension prerelease
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
   workflow_dispatch:
@@ -47,12 +49,25 @@ jobs:
           name: browser-release-packages
           path: dist/release/
           if-no-files-found: error
+      - name: Check whether initial prerelease exists
+        id: existing
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v0.1.0 >/dev/null 2>&1; then
+            echo 'exists=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'exists=false' >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish GitHub prerelease
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.event_name != 'pull_request' && steps.existing.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
           prerelease: true
-          name: Claude Split UI ${{ github.ref_name }} (Experimental)
+          tag_name: v0.1.0
+          target_commitish: ${{ github.sha }}
+          name: Claude Split UI v0.1.0 (Experimental)
           body_path: docs/releases/v0.1.0.md
           files: |
             dist/release/claude-split-ui-0.1.0-firefox.zip
