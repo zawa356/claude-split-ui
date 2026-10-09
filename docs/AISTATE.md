@@ -3,7 +3,7 @@
 <!-- Conventions: dates=ISO; V=verified-by-run by AI, U=user-verified on real app, O=observed in docs/handoff (not re-verified), H=hypothesis, ?=unknown. Paths repo-relative. Keep sections; prune stale; LOG newest-first, cap ~30 (fold older into HISTORY). -->
 
 ## META
-- updated: 2026-10-09 (session2: desktop)
+- updated: 2026-10-09 (session2: desktop, released v0.2.0)
 - head_at_update: 5886fdb (main, ff from origin) + uncommitted: docs/AISTATE.md, AGENTS.md, CLAUDE.md
 - user: zawa356; replies in Japanese. builds/releases via GitHub Actions (pnpm/WXT not used locally).
 - repo: https://github.com/zawa356/claude-split-ui ; MIT; unofficial; goal=restore split Chat/Cowork UI by client-side patch of GrowthBook flag in bootstrap response.
@@ -78,8 +78,8 @@
 - Keep README verified/unverified matrix honest.
 
 ## NEXT (session2 end)
-1. PR #8 feat/desktop-webext: version bumped to 0.2.0 (user decision, AMO later) + docs/releases/v0.2.0.md. merge => release job publishes v0.2.0 prerelease incl desktop zip. user to merge.
-2. claude_ctrl-enter 0.4: vendor loader, wrappers via package.mjs (or keep its richer ps1 as thin wrapper), adopt marker claude-keys.owner.json + manifestName legacy, -AdoptEnv when ClaudeKeys envSetByUs, Linux remove 90-claude-ctrl-enter.conf after adopt, mark ClaudeKeys state migrated. this VM already migrated manually (store has claude-ctrl-enter from local clone).
+1. DONE: PR #8 merged (5c1bf81) by AI with user permission; v0.2.0 prerelease PUBLISHED by CI with chrome/firefox/desktop zips + SHA256SUMS (verified download, sha OK, ps1/bat CRLF). AMO still on 0.1.1 docs (user: decide later).
+2. DONE: claude_ctrl-enter v0.4.0 released (PR #1 merged 671e1a2, tag pushed by AI with user permission). pending: user runs 0.4.0 install.bat on ENV-VM + restart check.
 3. Linux real test (none available).
 
 ## OPEN_QUESTIONS
@@ -87,6 +87,7 @@
 - Desktop auto-updates may change loader chunk; need version check list like sibling TestedVersions.
 
 ## LOG (newest first)
+- 2026-10-09 | claude-opus-5-5 | session2n: user permitted merge+release. merged PR #8 -> v0.2.0 prerelease published; merged ctrl-enter PR #1 + tag v0.4.0 -> released. note: Windows PowerShell 5.1 has no && (gave user a bash-style command by mistake; use ; / if ($?) or separate lines).
 - 2026-10-09 | claude-opus-5-5 | session2m: bumped to 0.2.0 (user) + docs/releases/v0.2.0.md; submodule -> loader b46a222 (webext.sh checks python3 actually runs; Windows Store alias). ctrl-enter 0.4.0 PR zawa356/claude_ctrl-enter#1 opened from this session (loader-based install/migration).
 - 2026-10-09 | claude-opus-5-5 | session2l: user verified loader-based install on VM. branch feat/desktop-webext: submodule, apps/desktop config, CI/release packaging, README/FAQ en+ja Desktop sections, superseded notes. npm test + check-docs pass.
 - 2026-10-09 | claude-opus-5-5 | session2k: loader public; real VM install of ctrl-enter(adopt)+split-ui via loader; waiting for user restart.
