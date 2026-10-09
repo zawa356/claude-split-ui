@@ -57,5 +57,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: wxt-${{ matrix.browser }}-mv3-unverified
-          path: apps/browser-extension/.output/*-${{ matrix.browser }}.zip
+          path: apps/browser-extension/.output/*.zip
           if-no-files-found: error
