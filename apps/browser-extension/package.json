@@ -1,5 +1,19 @@
 {
   "name": "@claude-split-ui/browser-extension",
-  "version": "0.0.0",
-  "private": true
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "wxt prepare",
+    "typecheck": "tsc --noEmit",
+    "build:chrome": "wxt build -b chrome --mv3",
+    "build:firefox": "wxt build -b firefox --mv3",
+    "zip:chrome": "wxt zip -b chrome --mv3",
+    "zip:firefox": "wxt zip -b firefox --mv3"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "wxt": "0.21.4",
+    "playwright": "1.56.0"
+  }
 }
