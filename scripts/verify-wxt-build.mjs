@@ -8,6 +8,10 @@ const root = resolve(import.meta.dirname, '../apps/browser-extension/.output', `
 const manifestFile = join(root, 'manifest.json');
 assert.ok(existsSync(manifestFile), `missing ${manifestFile}`);
 const manifest = JSON.parse(readFileSync(manifestFile, 'utf8'));
+const extensionPkg = JSON.parse(readFileSync(resolve(import.meta.dirname, '../apps/browser-extension/package.json'), 'utf8'));
+const rootPkg = JSON.parse(readFileSync(resolve(import.meta.dirname, '../package.json'), 'utf8'));
+assert.equal(extensionPkg.version, rootPkg.version, 'workspace version mismatch');
+assert.equal(manifest.version, extensionPkg.version, 'built manifest version mismatch');
 assert.equal(manifest.manifest_version, 3);
 const scripts = manifest.content_scripts ?? [];
 assert.equal(scripts.length, 1, 'expected exactly one early content script');

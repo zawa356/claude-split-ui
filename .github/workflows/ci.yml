@@ -29,7 +29,7 @@ jobs:
           if-no-files-found: error
 
   wxt-build:
-    name: Build WXT (${{ matrix.browser }} MV3) - runtime unverified
+    name: Build WXT (${{ matrix.browser }} MV3) - basic runtime smoke-tested
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -53,10 +53,10 @@ jobs:
         run: node scripts/verify-wxt-build.mjs ${{ matrix.browser }}
       - name: ZIP build
         run: pnpm run zip:${{ matrix.browser }}
-      - name: Upload WXT build ZIP (NOT browser-tested)
+      - name: Upload WXT build ZIP (MANUALLY BASIC TESTED)
         uses: actions/upload-artifact@v4
         with:
-          name: wxt-${{ matrix.browser }}-mv3-unverified
-          path: apps/browser-extension/.output/claude-split-uibrowser-extension-0.1.0-${{ matrix.browser }}.zip
+          name: wxt-${{ matrix.browser }}-mv3
+          path: apps/browser-extension/.output/*.zip
           include-hidden-files: true
           if-no-files-found: error

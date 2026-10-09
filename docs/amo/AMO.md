@@ -20,7 +20,7 @@ A successful submission job is **not** proof of Mozilla approval or public listi
 - **CI:** Every PR and push to main/feat branches builds the Firefox extension, checks its manifest, runs Mozilla lint, and saves source/build artifacts.
 - **CD:** Only explicit manual `SUBMIT` on `main`, using owner-managed GitHub Actions secrets, sends the listed version to Mozilla. We can automate on future release tags after the first listing works reliably.
 - **Distribution:** Listed AMO add-ons receive automatic updates through Firefox after Mozilla publishes newer versions.
-- **Versioning:** Increment `manifest.json` and package version before a second submission. The existing GitHub v0.1.0 prerelease is a separate ZIP and is **not** Mozilla-signed.
+- **Versioning:** Increment `manifest.json` and package version before a second submission. The GitHub v0.1.0 prerelease remains an archival, unsigned ZIP from the earlier build. The current AMO submission candidate is v0.1.1 with an updated Firefox add-on ID and data-collection declaration. GitHub ZIP files are **not** Mozilla-signed.
 
 Mozilla may require screenshots, privacy disclosures, listing text edits, and further reviewer information. Check your account's Developer Hub for outstanding requests.
 

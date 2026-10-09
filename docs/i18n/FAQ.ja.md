@@ -20,7 +20,7 @@
 `about:debugging` で一時アドオンの読み込みを確認し、Claudeを再読み込みしてください。FirefoxのNetwork Overrideが残っていないかも確認してください。Claude側の更新で機能が変わった可能性もあります。
 
 ### 拡張機能を読み込めない
-ActionsのArtifact ZIPを展開し、その中のWXT生成ZIPも展開してください。Firefoxでは内側の `manifest.json` を `about:debugging` で選択します。Chromeでは `chrome://extensions/` から、そのmanifestを含むフォルダーを選択します。Firefoxの一時アドオンは再起動後に再読み込みが必要です。
+[GitHub Releases](https://github.com/zawa356/claude-split-ui/releases)からブラウザ用ZIPを取得し、一度展開してください。Firefoxでは展開先の `manifest.json` を `about:debugging` で選択します。Chromeでは `chrome://extensions/` から、そのmanifestを含むフォルダーを選択します。Firefoxの一時アドオンは再起動後に再読み込みが必要です。
 
 ### 元に戻したい
 一時アドオンを削除してClaudeを再読み込みしてください。サーバーの設定は変更されません。

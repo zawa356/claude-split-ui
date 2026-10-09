@@ -31,10 +31,10 @@ Claude's web interface changed from separate **Chat** and **Cowork** modes to a 
 
 ## Quick start — Firefox and Chrome
 
-Both WXT builds passed a basic manual test on Claude Web: the Chat / Cowork selector appeared with the extension enabled, and the unified interface returned when it was removed/disabled and the page was reloaded. **These are developer/test installations, not signed store releases.**
+Both WXT builds (originally tested in the v0.1.0 development cycle) passed a basic manual test on Claude Web: the Chat / Cowork selector appeared with the extension enabled, and the unified interface returned when it was removed/disabled and the page was reloaded. **These are developer/test installations, not signed store releases.**
 
-1. Open [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.1.0).
-2. Under **Assets**, download `claude-split-ui-0.1.0-firefox.zip` or `claude-split-ui-0.1.0-chrome.zip` for your browser.
+1. Open [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.1.1).
+2. Under **Assets**, download `claude-split-ui-0.1.1-firefox.zip` or `claude-split-ui-0.1.0-chrome.zip` for your browser.
 3. **Extract the ZIP** into a folder. The folder must contain `manifest.json` and `content-scripts/` at its top level.
 4. **Firefox:** open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → choose `manifest.json` in the extracted extension folder. Temporary add-ons disappear after Firefox restarts.
 5. **Chrome:** open `chrome://extensions/` → enable **Developer mode** → **Load unpacked** → select the extracted extension **folder** containing `manifest.json`.
@@ -42,7 +42,7 @@ Both WXT builds passed a basic manual test on Claude Web: the Chat / Cowork sele
 
 **Undo:** In Firefox, remove the temporary add-on in `about:debugging`; in Chrome, switch off or remove the extension in `chrome://extensions/`. Reload Claude and confirm the unified interface returns.
 
-**Limitations:** No Mozilla-signed XPI or Chrome Web Store release is available yet. ZIP-to-XPI renaming does not add a Mozilla signature. Only the basic split/restore UI flow has been manually checked; compatibility with other releases/accounts and all Cowork functionality is not guaranteed.
+**Limitations:** Firefox AMO submission is prepared but not submitted or approved. No Mozilla-signed XPI or Chrome Web Store release is available yet. ZIP-to-XPI renaming does not add a Mozilla signature. Only the basic split/restore UI flow has been manually checked; compatibility with other releases/accounts and all Cowork functionality is not guaranteed.
 
 **Reference implementation:** If WXT fails, the earlier [Firefox PoC](poc/firefox-mv3/README.md) is retained for diagnostics. Never post authenticated HAR files or bootstrap payloads to GitHub issues.
 
@@ -57,7 +57,7 @@ Claude Web → same-origin bootstrap fetch
 
 Only a matching bootstrap response is considered. Other fetches and unknown response formats pass through. The project does not collect telemetry, transmit response bodies, or save authentication material.
 
-[Technical notes](docs/research/wxt-migration.md) · [Privacy policy](docs/PRIVACY.md)
+[Technical notes](docs/research/wxt-migration.md) · [Privacy policy](docs/PRIVACY.md) · [Firefox AMO publishing](docs/amo/AMO.md)
 
 ## For developers
 
@@ -69,7 +69,7 @@ npm test
 npm run build:poc
 ```
 
-To build the **unverified** WXT variants:
+To build the WXT variants (the basic split/restore flow has been manually verified; broader compatibility is not guaranteed):
 
 ```sh
 corepack enable

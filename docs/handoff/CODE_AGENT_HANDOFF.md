@@ -1,3 +1,5 @@
+> **Historical handoff (archive):** This document reflects the planning stage before WXT implementation and before Firefox/Chrome real-browser smoke tests. For current status see [README](../../README.md), [WXT validation](../research/wxt-migration.md), and [AMO publishing](../amo/AMO.md). Claims below about unimplemented WXT variants or Firefox-PoC-only releases are superseded.
+
 # Handoff to Claude Code / Codex
 
 ## Goal

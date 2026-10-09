@@ -20,7 +20,7 @@ No. A reversible Electron patcher is only planned.
 Confirm the temporary add-on is loaded in `about:debugging`, reload Claude, disable any Firefox Network Override, and verify the current Claude release still uses the same flag. The upstream may have changed; there is no guarantee of compatibility.
 
 ### I cannot load the extension
-Download and extract the Actions artifact ZIP, then extract the bundled WXT ZIP inside it. For Firefox, select the inner extension's **manifest.json** via `about:debugging`. For Chrome, select the folder containing that manifest via **Load unpacked** in `chrome://extensions/`. Firefox temporary add-ons must be loaded again after browser restart.
+Download the appropriate browser ZIP from [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/latest) and extract it once. For Firefox, select the extracted **manifest.json** via `about:debugging`. For Chrome, select the folder containing that manifest via **Load unpacked** in `chrome://extensions/`. Firefox temporary add-ons must be loaded again after browser restart.
 
 ### I want to revert
 Remove the temporary extension and reload Claude. No server-side setting is changed.
