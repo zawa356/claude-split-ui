@@ -34,8 +34,8 @@ Claude's web interface changed from separate **Chat** and **Cowork** modes to a 
 
 Both WXT builds (originally tested in the v0.1.0 development cycle) passed a basic manual test on Claude Web: the Chat / Cowork selector appeared with the extension enabled, and the unified interface returned when it was removed/disabled and the page was reloaded. **These are developer/test installations, not signed store releases.**
 
-1. Open [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.1.1).
-2. Under **Assets**, download `claude-split-ui-0.1.1-firefox.zip` or `claude-split-ui-0.1.0-chrome.zip` for your browser.
+1. Open [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.2.0).
+2. Under **Assets**, download `claude-split-ui-0.2.0-firefox.zip` or `claude-split-ui-0.2.0-chrome.zip` for your browser.
 3. **Extract the ZIP** into a folder. The folder must contain `manifest.json` and `content-scripts/` at its top level.
 4. **Firefox:** open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → choose `manifest.json` in the extracted extension folder. Temporary add-ons disappear after Firefox restarts.
 5. **Chrome:** open `chrome://extensions/` → enable **Developer mode** → **Load unpacked** → select the extracted extension **folder** containing `manifest.json`.
@@ -49,7 +49,7 @@ Both WXT builds (originally tested in the v0.1.0 development cycle) passed a bas
 
 Claude Desktop is not patched. The Chrome build is installed through [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext), a small loader that Claude Desktop picks up via its React DevTools extension slot (`REACT_PROFILE=1`) and that lets several extensions share that slot.
 
-1. Download `claude-split-ui-<version>-desktop.zip` from [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases) (published from the next release on) and extract it.
+1. Download `claude-split-ui-0.2.0-desktop.zip` from [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.2.0) and extract it.
 2. **Windows:** run `install.bat`. **Linux:** run `bash install.sh`, then log out and in once.
 3. Quit Claude completely (tray icon → Quit) and start it again. The Chat / Cowork selector appears next to `+` in the composer.
 

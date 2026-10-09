@@ -33,8 +33,8 @@ CIの成功はブラウザ上の動作保証ではありません。最新状況
 
 両方のWXT版について（v0.1.0開発時に）Claude Web上の簡易実機テストを実施し、拡張機能を有効にするとChat / Coworkが分離表示され、削除・無効化後の再読み込みで統合UIに戻ることを確認しました。**現段階は開発者向けの手動インストール方式です。**
 
-1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.1.1)を開きます。
-2. **Assets**から、Firefoxなら `claude-split-ui-0.1.1-firefox.zip`、Chromeなら `claude-split-ui-0.1.0-chrome.zip` をダウンロードします。
+1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.2.0)を開きます。
+2. **Assets**から、Firefoxなら `claude-split-ui-0.2.0-firefox.zip`、Chromeなら `claude-split-ui-0.2.0-chrome.zip` をダウンロードします。
 3. ZIPを展開し、展開先フォルダー直下に `manifest.json` と `content-scripts/` があることを確認します。
 4. **Firefox：** `about:debugging#/runtime/this-firefox` → **「一時的なアドオンを読み込む…」** → 展開済み拡張機能内の `manifest.json` を選択します。Firefoxを再起動すると一時アドオンは解除されます。
 5. **Chrome：** `chrome://extensions/` → **デベロッパーモード**を有効化 → **「パッケージ化されていない拡張機能を読み込む」** → `manifest.json` が直下にある**フォルダー**を選択します。
@@ -48,7 +48,7 @@ CIの成功はブラウザ上の動作保証ではありません。最新状況
 
 Claude本体は書き換えません。Chrome版を [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext) 経由で導入します。これは、Claude DesktopがReact DevTools用に読み込む拡張の枠（`REACT_PROFILE=1`）を複数の拡張で共有するための小さなローダーです。
 
-1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases) から `claude-split-ui-<版>-desktop.zip` をダウンロードして展開します（次のリリースから配布）。
+1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.2.0) から `claude-split-ui-0.2.0-desktop.zip` をダウンロードして展開します。
 2. **Windows：** `install.bat` を実行。**Linux：** `bash install.sh` を実行し、一度ログアウト・ログインします。
 3. Claudeを完全に終了（タスクトレイのアイコン →「終了」）してから起動し直します。入力欄の「＋」の横にChat / Coworkの切り替えが出ます。
 

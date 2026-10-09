@@ -78,7 +78,7 @@
 - Keep README verified/unverified matrix honest.
 
 ## NEXT (session2 end)
-1. PR #8 feat/desktop-webext -> main: ALL CHECKS GREEN (release job built+verified claude-split-ui-0.1.1-desktop.zip in PR mode). not merged; user decides. merging alone does NOT publish desktop zip because v0.1.1 release exists -> needs version bump (0.2.0?) + docs/releases/v<ver>.md; bump also changes AMO candidate (docs/amo mention 0.1.1). ask user.
+1. PR #8 feat/desktop-webext: version bumped to 0.2.0 (user decision, AMO later) + docs/releases/v0.2.0.md. merge => release job publishes v0.2.0 prerelease incl desktop zip. user to merge.
 2. claude_ctrl-enter 0.4: vendor loader, wrappers via package.mjs (or keep its richer ps1 as thin wrapper), adopt marker claude-keys.owner.json + manifestName legacy, -AdoptEnv when ClaudeKeys envSetByUs, Linux remove 90-claude-ctrl-enter.conf after adopt, mark ClaudeKeys state migrated. this VM already migrated manually (store has claude-ctrl-enter from local clone).
 3. Linux real test (none available).
 
