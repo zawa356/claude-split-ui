@@ -6,7 +6,7 @@ export default defineConfig({
   manifest: ({ browser }) => ({
     name: 'Claude Split UI (Unofficial)',
     description: 'Experimental restoration of Claude Chat/Cowork split UI. No telemetry.',
-    version: '0.1.0',
+    version: '0.1.1',
     ...(browser === 'firefox' ? {
       browser_specific_settings: {
         gecko: {

@@ -6,6 +6,8 @@ import { join, resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const pkg = JSON.parse(readFileSync(join(root, 'apps/browser-extension/package.json'), 'utf8'));
 const version = pkg.version;
+const rootPkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
+assert.equal(version, rootPkg.version, 'root and extension versions must match');
 const generated = 'claude-split-uibrowser-extension-' + version;
 const outputDir = join(root, 'apps/browser-extension/.output');
 const dest = join(root, 'dist/release');
