@@ -5,6 +5,7 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+  pull_request:
 
 permissions:
   contents: write
@@ -35,7 +36,11 @@ jobs:
           node scripts/verify-wxt-build.mjs firefox
           node scripts/verify-wxt-build.mjs chrome
       - name: Verify and stage distributable archives
-        run: node scripts/stage-release.mjs
+        run: |
+          node scripts/stage-release.mjs
+          unzip -t dist/release/claude-split-ui-0.1.0-firefox.zip
+          unzip -t dist/release/claude-split-ui-0.1.0-chrome.zip
+          cd dist/release && sha256sum -c SHA256SUMS.txt
       - name: Upload temporary artifacts
         uses: actions/upload-artifact@v4
         with:
