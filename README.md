@@ -27,13 +27,13 @@ Claude's web interface changed from separate **Chat** and **Cowork** modes to a 
 | Claude Desktop — Electron | **Planned** | No usable patcher or release |
 
 > [!NOTE]
-> A successful CI build is **not** proof of runtime compatibility. Check the [Actions page](../../actions) for the latest result.
+> A successful CI build is **not** proof of runtime compatibility. Check the [Actions page](https://github.com/zawa356/claude-split-ui/actions) for the latest result.
 
 ## Quick start — Firefox PoC
 
 **Requirements:** Firefox 128+ (manually tested with Firefox 157.0.1), access to Claude Web, and a local checkout or extracted source ZIP. No Node.js is needed for this PoC.
 
-1. [Download the repository ZIP](../../archive/refs/heads/main.zip) and extract it, or clone this repository.
+1. [Download the repository ZIP](https://github.com/zawa356/claude-split-ui/archive/refs/heads/main.zip) and extract it, or clone this repository.
 2. In Firefox, open `about:debugging#/runtime/this-firefox`.
 3. Click **Load Temporary Add-on…** and select `poc/firefox-mv3/manifest.json`.
 4. Open [Claude Web](https://claude.ai/new) and reload the page.
