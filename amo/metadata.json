@@ -1,0 +1,29 @@
+{
+  "name": {
+    "en-US": "Claude Split UI (Unofficial)",
+    "ja": "Claude Split UI（非公式）"
+  },
+  "summary": {
+    "en-US": "Restore the separate Chat / Cowork selector in Claude Web (experimental).",
+    "ja": "Claude WebのChat / Cowork分離表示を復元する非公式の実験的拡張機能。"
+  },
+  "description": {
+    "en-US": "An unofficial, experimental extension that locally changes one client-side bootstrap feature setting to restore the Chat / Cowork selector on Claude Web. It does not add account capabilities, bypass server authorization, collect data, or send telemetry. Compatibility may change when Claude updates. This project is independent of Anthropic.",
+    "ja": "Claude WebのChat / Cowork分離UIを、ブラウザ内の限定的なクライアント設定変更によって復元する非公式の実験的拡張機能です。アカウントの権限追加・認証回避は行わず、データ収集・テレメトリー送信も行いません。Claude側の更新で動作しなくなる場合があります。Anthropicとは無関係です。"
+  },
+  "categories": {
+    "firefox": [
+      "appearance"
+    ]
+  },
+  "version": {
+    "license": "MIT",
+    "approval_notes": "Source repository: https://github.com/zawa356/claude-split-ui . The extension intercepts only same-origin /edge-api/bootstrap/.../app_start fetch responses and changes the client-side feature definition 1174351393. It collects and transmits no data, does not unlock entitlements, and has no telemetry. WXT-generated bundle and reproducible source package with build guide are included. Non-official and experimental; no Anthropic affiliation."
+  },
+  "homepage": {
+    "en-US": "https://github.com/zawa356/claude-split-ui"
+  },
+  "support_url": {
+    "en-US": "https://github.com/zawa356/claude-split-ui/issues"
+  }
+}
