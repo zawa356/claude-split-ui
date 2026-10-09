@@ -1,36 +1,76 @@
-name: Prerelease (tested Firefox PoC only)
+name: Publish browser extension prerelease
 
 on:
   push:
+    branches:
+      - main
     tags:
-      - 'v*'
+      - 'v0.1.0'
+  workflow_dispatch:
+  pull_request:
 
 permissions:
   contents: write
 
 jobs:
   prerelease:
-    name: Validate and publish experimental prerelease
+    name: Validate, bundle and publish browser ZIPs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Run checks and tests
+      - run: pnpm install --no-frozen-lockfile
+      - name: Validate project and manifests
         run: |
           npm run check
           npm test
-      - name: Build verified Firefox PoC
+          node scripts/check-docs.mjs
+          pnpm --filter @claude-split-ui/browser-extension typecheck
+      - name: Package browser builds
         run: |
-          npm run build:poc
-          unzip -t dist/claude-split-ui-firefox-poc.zip
-          cd dist && sha256sum claude-split-ui-firefox-poc.zip > SHA256SUMS.txt
+          pnpm run zip:firefox
+          pnpm run zip:chrome
+          node scripts/verify-wxt-build.mjs firefox
+          node scripts/verify-wxt-build.mjs chrome
+      - name: Verify and stage distributable archives
+        run: |
+          node scripts/stage-release.mjs
+          unzip -t dist/release/claude-split-ui-0.1.0-firefox.zip
+          unzip -t dist/release/claude-split-ui-0.1.0-chrome.zip
+          cd dist/release && sha256sum -c SHA256SUMS.txt
+      - name: Upload temporary artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-release-packages
+          path: dist/release/
+          if-no-files-found: error
+      - name: Check whether initial prerelease exists
+        id: existing
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v0.1.0 >/dev/null 2>&1; then
+            echo 'exists=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'exists=false' >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish GitHub prerelease
+        if: github.event_name != 'pull_request' && steps.existing.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
           prerelease: true
-          generate_release_notes: true
+          tag_name: v0.1.0
+          target_commitish: ${{ github.sha }}
+          name: Claude Split UI v0.1.0 (Experimental)
+          body_path: docs/releases/v0.1.0.md
           files: |
-            dist/claude-split-ui-firefox-poc.zip
-            dist/SHA256SUMS.txt
+            dist/release/claude-split-ui-0.1.0-firefox.zip
+            dist/release/claude-split-ui-0.1.0-chrome.zip
+            dist/release/SHA256SUMS.txt
+          fail_on_unmatched_files: true

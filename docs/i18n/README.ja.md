@@ -32,9 +32,9 @@ CIの成功はブラウザ上の動作保証ではありません。最新状況
 
 両方のWXT版についてClaude Web上の簡易実機テストを実施し、拡張機能を有効にするとChat / Coworkが分離表示され、削除・無効化後の再読み込みで統合UIに戻ることを確認しました。**現段階は開発者向けの手動インストール方式です。**
 
-1. [GitHub Actionsのビルド成功ページ](https://github.com/zawa356/claude-split-ui/actions/runs/37882338338)を開きます。
-2. 画面下部の**Artifacts**から、Firefoxなら `wxt-firefox-mv3-unverified`、Chromeなら `wxt-chrome-mv3-unverified` をダウンロードします。GitHubへのログインが必要な場合があります。
-3. ダウンロードしたArtifactのZIPを展開し、**中に入っているWXT生成ZIPも展開**します。最終的な拡張機能フォルダー直下に `manifest.json` と `content-scripts/` があることを確認します。
+1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.1.0)を開きます。
+2. **Assets**から、Firefoxなら `claude-split-ui-0.1.0-firefox.zip`、Chromeなら `claude-split-ui-0.1.0-chrome.zip` をダウンロードします。
+3. ZIPを展開し、展開先フォルダー直下に `manifest.json` と `content-scripts/` があることを確認します。
 4. **Firefox：** `about:debugging#/runtime/this-firefox` → **「一時的なアドオンを読み込む…」** → 展開済み拡張機能内の `manifest.json` を選択します。Firefoxを再起動すると一時アドオンは解除されます。
 5. **Chrome：** `chrome://extensions/` → **デベロッパーモード**を有効化 → **「パッケージ化されていない拡張機能を読み込む」** → `manifest.json` が直下にある**フォルダー**を選択します。
 6. [Claude Web](https://claude.ai/new)を開く、または再読み込みし、Chat / Coworkの分離表示を確認します。

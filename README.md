@@ -33,9 +33,9 @@ Claude's web interface changed from separate **Chat** and **Cowork** modes to a 
 
 Both WXT builds passed a basic manual test on Claude Web: the Chat / Cowork selector appeared with the extension enabled, and the unified interface returned when it was removed/disabled and the page was reloaded. **These are developer/test installations, not signed store releases.**
 
-1. Open the [successful GitHub Actions WXT build](https://github.com/zawa356/claude-split-ui/actions/runs/37882338338).
-2. Under **Artifacts**, download `wxt-firefox-mv3-unverified` or `wxt-chrome-mv3-unverified` for your browser. GitHub sign-in may be required.
-3. **Extract the downloaded artifact ZIP**, then extract the WXT-generated extension ZIP inside it. The innermost extension folder must contain `manifest.json` and `content-scripts/` at its top level.
+1. Open [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.1.0).
+2. Under **Assets**, download `claude-split-ui-0.1.0-firefox.zip` or `claude-split-ui-0.1.0-chrome.zip` for your browser.
+3. **Extract the ZIP** into a folder. The folder must contain `manifest.json` and `content-scripts/` at its top level.
 4. **Firefox:** open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → choose `manifest.json` in the extracted extension folder. Temporary add-ons disappear after Firefox restarts.
 5. **Chrome:** open `chrome://extensions/` → enable **Developer mode** → **Load unpacked** → select the extracted extension **folder** containing `manifest.json`.
 6. Open [Claude Web](https://claude.ai/new) (or reload it). Confirm the separate Chat / Cowork selector appears.
