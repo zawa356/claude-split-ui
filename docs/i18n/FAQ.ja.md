@@ -9,7 +9,7 @@
 いいえ。独立した非公式の実験プロジェクトです。
 
 ## Chromeには対応していますか？
-WXT版のビルド候補はありますが、実機でのA/B/A検証は未完了です。現時点で手動検証済みなのはFirefoxの従来PoCだけです。
+はい。ChromeのWXT版は「パッケージ化されていない拡張機能を読み込む」方式で、分離表示と無効化後の統合UI復帰を簡易実機検証済みです。ただしChrome Web Storeにはまだ公開していません。
 
 ## Claude Desktopに対応していますか？
 まだ対応していません。復元可能なElectronパッチャーを計画しています。
@@ -20,7 +20,7 @@ WXT版のビルド候補はありますが、実機でのA/B/A検証は未完了
 `about:debugging` で一時アドオンの読み込みを確認し、Claudeを再読み込みしてください。FirefoxのNetwork Overrideが残っていないかも確認してください。Claude側の更新で機能が変わった可能性もあります。
 
 ### 拡張機能を読み込めない
-ZIPではなく `poc/firefox-mv3/manifest.json` を選択してください。Firefoxの再起動後は再読み込みが必要です。
+ActionsのArtifact ZIPを展開し、その中のWXT生成ZIPも展開してください。Firefoxでは内側の `manifest.json` を `about:debugging` で選択します。Chromeでは `chrome://extensions/` から、そのmanifestを含むフォルダーを選択します。Firefoxの一時アドオンは再起動後に再読み込みが必要です。
 
 ### 元に戻したい
 一時アドオンを削除してClaudeを再読み込みしてください。サーバーの設定は変更されません。

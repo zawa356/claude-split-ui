@@ -6,7 +6,7 @@
 
 [English](../../README.md) · [日本語](README.ja.md)
 
-[クイックスタート](#クイックスタートfirefox-poc) · [対応状況](#対応状況) · [FAQ](../FAQ.md) · [開発参加](../../CONTRIBUTING.md) · [セキュリティ](../../SECURITY.md)
+[クイックスタート](#クイックスタートfirefoxchrome) · [対応状況](#対応状況) · [FAQ](../FAQ.md) · [開発参加](../../CONTRIBUTING.md) · [セキュリティ](../../SECURITY.md)
 
 > [!WARNING]
 > **非公式・実験的なプロジェクトです。** Anthropicとは提携・協賛・関係していません。非公開の実装に依存しており、予告なく動作しなくなる可能性があります。
@@ -22,28 +22,28 @@ Claude Webで統合されたChatとCoworkのUIを、**クライアント側の�
 | 対象 | 状態 | 確認できていること |
 | :-- | :-- | :-- |
 | Firefox：従来のMV3 PoC | **実機確認済み** | 有効化・再読込で分離UI、削除・再読込で統合UIへ復帰 |
-| Firefox：WXT版 | **実験段階** | CIでビルド、実機A/B/Aテスト未実施 |
-| Chrome：WXT版 | **実験段階** | CIでビルド、実機A/B/Aテスト未実施 |
+| Firefox：WXT版 | **基本動作確認済み** | 一時インストールで分離表示、削除・再読み込みで統合UIに復帰 |
+| Chrome：WXT版 | **基本動作確認済み** | 展開した拡張機能で分離表示、無効化・再読み込みで統合UIに復帰 |
 | Claude Desktop：Electron | **構想段階** | パッチャー未実装 |
 
 CIの成功はブラウザ上の動作保証ではありません。最新状況は[GitHub Actions](https://github.com/zawa356/claude-split-ui/actions)をご覧ください。
 
-## クイックスタート：Firefox PoC
+## クイックスタート：Firefox・Chrome
 
-**必要なもの：** Firefox 128以降（実機確認は157.0.1）、Claude Webにアクセスできる環境、展開したリポジトリ。Node.jsは不要です。
+両方のWXT版についてClaude Web上の簡易実機テストを実施し、拡張機能を有効にするとChat / Coworkが分離表示され、削除・無効化後の再読み込みで統合UIに戻ることを確認しました。**現段階は開発者向けの手動インストール方式です。**
 
-1. [ソースコードZIP](https://github.com/zawa356/claude-split-ui/archive/refs/heads/main.zip)を取得して展開するか、リポジトリをcloneします。
-2. Firefoxで `about:debugging#/runtime/this-firefox` を開きます。
-3. **「一時的なアドオンを読み込む…」** から `poc/firefox-mv3/manifest.json` を指定します。
-4. [Claude Web](https://claude.ai/new) を開いて再読み込みします。
-5. Chat / Coworkの分離切替が表示されるか確認します。表示はアカウントやClaude側の更新により異なる可能性があります。
+1. [GitHub Actionsのビルド成功ページ](https://github.com/zawa356/claude-split-ui/actions/runs/37882338338)を開きます。
+2. 画面下部の**Artifacts**から、Firefoxなら `wxt-firefox-mv3-unverified`、Chromeなら `wxt-chrome-mv3-unverified` をダウンロードします。GitHubへのログインが必要な場合があります。
+3. ダウンロードしたArtifactのZIPを展開し、**中に入っているWXT生成ZIPも展開**します。最終的な拡張機能フォルダー直下に `manifest.json` と `content-scripts/` があることを確認します。
+4. **Firefox：** `about:debugging#/runtime/this-firefox` → **「一時的なアドオンを読み込む…」** → 展開済み拡張機能内の `manifest.json` を選択します。Firefoxを再起動すると一時アドオンは解除されます。
+5. **Chrome：** `chrome://extensions/` → **デベロッパーモード**を有効化 → **「パッケージ化されていない拡張機能を読み込む」** → `manifest.json` が直下にある**フォルダー**を選択します。
+6. [Claude Web](https://claude.ai/new)を開く、または再読み込みし、Chat / Coworkの分離表示を確認します。
 
-**元に戻す：** `about:debugging` で一時アドオンを削除し、Claudeを再読み込みします。ローカルのファイルは消えません。
+**元に戻す：** Firefoxは `about:debugging` で一時アドオンを削除。Chromeは `chrome://extensions/` でスイッチをOFFにするか削除。その後Claudeを再読み込みすると統合UIに戻ります。
 
-**動かない場合：** FirefoxのNetwork Overrideが残っていないか確認し、[FAQ](../FAQ.md)を参照してください。HAR、認証済みAPIレスポンス、Cookie、トークンはIssueに投稿しないでください。
+**注意：** Mozilla署名済みXPIやChrome Web Storeでの配布はまだありません。ZIPをXPIへリネームしてもMozilla署名は付与されません。実機で確認したのは分離・復帰の基本動作であり、全アカウント・全バージョン・Coworkの各機能を保証するものではありません。
 
-> [!IMPORTANT]
-> PoCはページのMAIN worldで動作します。コードを確認したうえで使用してください。一時アドオンはFirefox再起動時に解除されます。
+WXT版で問題がある場合、旧来の[Firefox PoC](../../poc/firefox-mv3/README.md)も残しています。認証済みHARやbootstrapレスポンス原本はIssueに貼らないでください。
 
 ## 仕組み
 
@@ -84,7 +84,7 @@ pnpm run build:chrome
 | ディレクトリ | 用途 |
 | :-- | :-- |
 | `poc/firefox-mv3/` | 実機確認済みPoC |
-| `apps/browser-extension/` | Firefox / Chrome共通WXT版（実機未検証） |
+| `apps/browser-extension/` | Firefox / Chrome共通WXT版（基本動作確認済み） |
 | `packages/core/` | 共通処理とテスト |
 | `apps/desktop-patcher/` | 将来のElectron版 |
 | `docs/` | 解析資料・開発資料・翻訳 |
@@ -94,9 +94,9 @@ pnpm run build:chrome
 - [x] Feature Flagの特定とUI変化の再現
 - [x] Firefox MV3 PoCのA/B/A検証
 - [x] 共通ロジックとWXTビルド候補の実装
-- [ ] WXT Firefoxの実機検証
-- [ ] WXT Chromeの実機検証
-- [ ] ブラウザ回帰テストの整備
+- [x] WXT Firefoxの分離・復帰の簡易実機検証
+- [x] WXT Chromeの分離・復帰の簡易実機検証
+- [x] 合成データによるブラウザ回帰テスト（Chromium拡張機能／Firefox生成スクリプト）
 - [ ] 復元可能なDesktopパッチャーの設計・実装・検証
 
 ## コミュニティとライセンス
