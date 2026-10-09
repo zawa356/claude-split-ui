@@ -6,7 +6,7 @@
 
 [English](README.md) · [日本語](docs/i18n/README.ja.md)
 
-[Quick start](#quick-start--firefox-poc) · [Status](#project-status) · [FAQ](docs/FAQ.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+[Quick start](#quick-start--firefox-and-chrome) · [Status](#project-status) · [FAQ](docs/FAQ.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 > [!WARNING]
 > **Unofficial experimental project.** Not affiliated with, sponsored by, or endorsed by Anthropic. The underlying feature is undocumented and may stop working at any time.
@@ -22,29 +22,29 @@ Claude's web interface changed from separate **Chat** and **Cowork** modes to a 
 | Target | Status | What is actually verified |
 | :-- | :-- | :-- |
 | Firefox — original MV3 PoC | **Manually verified** | Split selector appears after installing and reloading; unified UI returns after removing and reloading |
-| Firefox — WXT extension | **Experimental** | Builds in CI; browser A/B/A validation pending |
-| Chrome — WXT extension | **Experimental** | Builds in CI; browser A/B/A validation pending |
+| Firefox — WXT extension | **Basic manual test passed** | Temporary installation restored split UI; removal and reload restored unified UI |
+| Chrome — WXT extension | **Basic manual test passed** | Unpacked installation restored split UI; disabling and reload restored unified UI |
 | Claude Desktop — Electron | **Planned** | No usable patcher or release |
 
 > [!NOTE]
 > A successful CI build is **not** proof of runtime compatibility. Check the [Actions page](https://github.com/zawa356/claude-split-ui/actions) for the latest result.
 
-## Quick start — Firefox PoC
+## Quick start — Firefox and Chrome
 
-**Requirements:** Firefox 128+ (manually tested with Firefox 157.0.1), access to Claude Web, and a local checkout or extracted source ZIP. No Node.js is needed for this PoC.
+Both WXT builds passed a basic manual test on Claude Web: the Chat / Cowork selector appeared with the extension enabled, and the unified interface returned when it was removed/disabled and the page was reloaded. **These are developer/test installations, not signed store releases.**
 
-1. [Download the repository ZIP](https://github.com/zawa356/claude-split-ui/archive/refs/heads/main.zip) and extract it, or clone this repository.
-2. In Firefox, open `about:debugging#/runtime/this-firefox`.
-3. Click **Load Temporary Add-on…** and select `poc/firefox-mv3/manifest.json`.
-4. Open [Claude Web](https://claude.ai/new) and reload the page.
-5. Look for the separate **Chat / Cowork** selector. The exact appearance may differ by account and upstream release.
+1. Open the [successful GitHub Actions WXT build](https://github.com/zawa356/claude-split-ui/actions/runs/37882338338).
+2. Under **Artifacts**, download `wxt-firefox-mv3-unverified` or `wxt-chrome-mv3-unverified` for your browser. GitHub sign-in may be required.
+3. **Extract the downloaded artifact ZIP**, then extract the WXT-generated extension ZIP inside it. The innermost extension folder must contain `manifest.json` and `content-scripts/` at its top level.
+4. **Firefox:** open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → choose `manifest.json` in the extracted extension folder. Temporary add-ons disappear after Firefox restarts.
+5. **Chrome:** open `chrome://extensions/` → enable **Developer mode** → **Load unpacked** → select the extracted extension **folder** containing `manifest.json`.
+6. Open [Claude Web](https://claude.ai/new) (or reload it). Confirm the separate Chat / Cowork selector appears.
 
-**Undo:** Remove the temporary add-on from `about:debugging` and reload Claude. The source files remain untouched.
+**Undo:** In Firefox, remove the temporary add-on in `about:debugging`; in Chrome, switch off or remove the extension in `chrome://extensions/`. Reload Claude and confirm the unified interface returns.
 
-**If it does not work:** Confirm that a Firefox DevTools Network Override is not active, reload, and consult [Troubleshooting](docs/FAQ.md#troubleshooting). Never upload a full HAR, raw bootstrap response, cookie, or authenticated request to an issue.
+**Limitations:** No Mozilla-signed XPI or Chrome Web Store release is available yet. ZIP-to-XPI renaming does not add a Mozilla signature. Only the basic split/restore UI flow has been manually checked; compatibility with other releases/accounts and all Cowork functionality is not guaranteed.
 
-> [!IMPORTANT]
-> This PoC executes in the page's MAIN world and is intended for informed testers. Inspect the code before loading it. Temporary add-ons disappear when Firefox is restarted.
+**Reference implementation:** If WXT fails, the earlier [Firefox PoC](poc/firefox-mv3/README.md) is retained for diagnostics. Never post authenticated HAR files or bootstrap payloads to GitHub issues.
 
 ## How it works
 
@@ -85,7 +85,7 @@ See [Development](docs/DEVELOPMENT.md) for build outputs, verification steps and
 | Path | Purpose |
 | :-- | :-- |
 | `poc/firefox-mv3/` | Manually verified reference PoC |
-| `apps/browser-extension/` | Shared WXT Firefox / Chrome implementation, not yet browser-validated |
+| `apps/browser-extension/` | Shared WXT Firefox / Chrome implementation, basic manual A/B/A test passed |
 | `packages/core/` | Bootstrap transformation and tests |
 | `apps/desktop-patcher/` | Future Electron patcher |
 | `docs/` | Research, troubleshooting, development and translations |
@@ -95,9 +95,9 @@ See [Development](docs/DEVELOPMENT.md) for build outputs, verification steps and
 - [x] Identify the relevant bootstrap feature and verify the UI difference
 - [x] Verify a reversible Firefox MV3 PoC
 - [x] Implement shared core and WXT build candidates
-- [ ] Validate WXT Firefox in a real browser
-- [ ] Validate WXT Chrome in a real browser
-- [ ] Add browser-level regression tests
+- [x] Validate basic split/restore flow of WXT Firefox in a real browser
+- [x] Validate basic split/restore flow of WXT Chrome in a real browser
+- [x] Add synthetic browser-engine regression tests (Chromium extension; Firefox generated script)
 - [ ] Design, implement and validate a reversible Desktop patcher
 
 ## Community and license
