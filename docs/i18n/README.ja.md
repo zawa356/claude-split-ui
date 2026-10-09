@@ -24,7 +24,8 @@ Claude Webで統合されたChatとCoworkのUIを、**クライアント側の�
 | Firefox：従来のMV3 PoC | **実機確認済み** | 有効化・再読込で分離UI、削除・再読込で統合UIへ復帰 |
 | Firefox：WXT版 | **基本動作確認済み** | 一時インストールで分離表示、削除・再読み込みで統合UIに復帰 |
 | Chrome：WXT版 | **基本動作確認済み** | 展開した拡張機能で分離表示、無効化・再読み込みで統合UIに復帰 |
-| Claude Desktop：Electron | **構想段階** | パッチャー未実装 |
+| Claude Desktop：Windows | **基本動作確認済み** | Claude 2.31226（Microsoft Store版）で、導入時に分離UI・解除後に統合UI。claude_ctrl-enter と共存 |
+| Claude Desktop：Linux | **未確認** | 同じパッケージ。ローダーはCIでのみ確認 |
 
 CIの成功はブラウザ上の動作保証ではありません。最新状況は[GitHub Actions](https://github.com/zawa356/claude-split-ui/actions)をご覧ください。
 
@@ -42,6 +43,16 @@ CIの成功はブラウザ上の動作保証ではありません。最新状況
 **元に戻す：** Firefoxは `about:debugging` で一時アドオンを削除。Chromeは `chrome://extensions/` でスイッチをOFFにするか削除。その後Claudeを再読み込みすると統合UIに戻ります。
 
 **注意：** Firefox AMO公開申請は準備済みですが、申請・承認はまだ行われていません。Mozilla署名済みXPIやChrome Web Storeでの配布はまだありません。ZIPをXPIへリネームしてもMozilla署名は付与されません。実機で確認したのは分離・復帰の基本動作であり、全アカウント・全バージョン・Coworkの各機能を保証するものではありません。
+
+## クイックスタート：Claude Desktop
+
+Claude本体は書き換えません。Chrome版を [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext) 経由で導入します。これは、Claude DesktopがReact DevTools用に読み込む拡張の枠（`REACT_PROFILE=1`）を複数の拡張で共有するための小さなローダーです。
+
+1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases) から `claude-split-ui-<版>-desktop.zip` をダウンロードして展開します（次のリリースから配布）。
+2. **Windows：** `install.bat` を実行。**Linux：** `bash install.sh` を実行し、一度ログアウト・ログインします。
+3. Claudeを完全に終了（タスクトレイのアイコン →「終了」）してから起動し直します。入力欄の「＋」の横にChat / Coworkの切り替えが出ます。
+
+**元に戻す：** `uninstall.bat` / `bash uninstall.sh` を実行し、Claudeを再起動します。`diagnose` は読み取りのみ、`repair` は枠を作り直します。Claudeのインストール先は変更せず、外したファイルは削除せずバックアップへ移します。現時点の確認はWindows・Claude 2.31226のみです（[記録](../research/2026-10-09-desktop-poc.md)）。
 
 WXT版で問題がある場合、旧来の[Firefox PoC](../../poc/firefox-mv3/README.md)も残しています。認証済みHARやbootstrapレスポンス原本はIssueに貼らないでください。
 
@@ -86,7 +97,7 @@ pnpm run build:chrome
 | `poc/firefox-mv3/` | 実機確認済みPoC |
 | `apps/browser-extension/` | Firefox / Chrome共通WXT版（基本動作確認済み） |
 | `packages/core/` | 共通処理とテスト |
-| `apps/desktop-patcher/` | 将来のElectron版 |
+| `apps/desktop/` | Claude Desktop用パッケージ設定（サブモジュール `vendor/claude-desktop-webext` で導入） |
 | `docs/` | 解析資料・開発資料・翻訳 |
 
 ## ロードマップ
@@ -97,7 +108,8 @@ pnpm run build:chrome
 - [x] WXT Firefoxの分離・復帰の簡易実機検証
 - [x] WXT Chromeの分離・復帰の簡易実機検証
 - [x] 合成データによるブラウザ回帰テスト（Chromium拡張機能／Firefox生成スクリプト）
-- [ ] 復元可能なDesktopパッチャーの設計・実装・検証
+- [x] 共有ローダー経由でClaude Desktop（Windows）を検証
+- [ ] Claude DesktopのLinux版を検証
 
 ## コミュニティとライセンス
 

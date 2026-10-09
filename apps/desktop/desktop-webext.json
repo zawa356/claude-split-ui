@@ -1,0 +1,10 @@
+{
+  "id": "claude-split-ui",
+  "displayName": "Claude Split UI",
+  "source": "../browser-extension/.output/chrome-mv3",
+  "order": 10,
+  "testedClaudeVersions": {
+    "windows": ["2.31226.0.0"],
+    "linux": []
+  }
+}

@@ -1,3 +1,5 @@
+> **Superseded (2026-10-09):** Patching `app.asar` is not feasible for the signed MSIX build. The Desktop target now loads the WXT content script through Claude Desktop's React DevTools extension slot. See the [Desktop PoC report](research/2026-10-09-desktop-poc.md) and the [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext) loader.
+
 # Electron Desktop patcher — design only
 
 The desktop patcher is not implemented and must not be represented as working.

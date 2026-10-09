@@ -24,7 +24,8 @@ Claude's web interface changed from separate **Chat** and **Cowork** modes to a 
 | Firefox — original MV3 PoC | **Manually verified** | Split selector appears after installing and reloading; unified UI returns after removing and reloading |
 | Firefox — WXT extension | **Basic manual test passed** | Temporary installation restored split UI; removal and reload restored unified UI |
 | Chrome — WXT extension | **Basic manual test passed** | Unpacked installation restored split UI; disabling and reload restored unified UI |
-| Claude Desktop — Electron | **Planned** | No usable patcher or release |
+| Claude Desktop — Windows | **Basic manual test passed** | Claude 2.31226 (Microsoft Store): split UI with the package installed, unified UI after removal; coexists with claude_ctrl-enter |
+| Claude Desktop — Linux | **Untested** | Same package; loader tested in CI only |
 
 > [!NOTE]
 > A successful CI build is **not** proof of runtime compatibility. Check the [Actions page](https://github.com/zawa356/claude-split-ui/actions) for the latest result.
@@ -43,6 +44,16 @@ Both WXT builds (originally tested in the v0.1.0 development cycle) passed a bas
 **Undo:** In Firefox, remove the temporary add-on in `about:debugging`; in Chrome, switch off or remove the extension in `chrome://extensions/`. Reload Claude and confirm the unified interface returns.
 
 **Limitations:** Firefox AMO submission is prepared but not submitted or approved. No Mozilla-signed XPI or Chrome Web Store release is available yet. ZIP-to-XPI renaming does not add a Mozilla signature. Only the basic split/restore UI flow has been manually checked; compatibility with other releases/accounts and all Cowork functionality is not guaranteed.
+
+## Quick start — Claude Desktop
+
+Claude Desktop is not patched. The Chrome build is installed through [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext), a small loader that Claude Desktop picks up via its React DevTools extension slot (`REACT_PROFILE=1`) and that lets several extensions share that slot.
+
+1. Download `claude-split-ui-<version>-desktop.zip` from [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases) (published from the next release on) and extract it.
+2. **Windows:** run `install.bat`. **Linux:** run `bash install.sh`, then log out and in once.
+3. Quit Claude completely (tray icon → Quit) and start it again. The Chat / Cowork selector appears next to `+` in the composer.
+
+**Undo:** run `uninstall.bat` / `bash uninstall.sh` and restart Claude. `diagnose` is read-only; `repair` regenerates the slot. Nothing in Claude's installation is modified, and removed files are moved to backups rather than deleted. Tested only on Windows with Claude 2.31226 so far ([report](docs/research/2026-10-09-desktop-poc.md)).
 
 **Reference implementation:** If WXT fails, the earlier [Firefox PoC](poc/firefox-mv3/README.md) is retained for diagnostics. Never post authenticated HAR files or bootstrap payloads to GitHub issues.
 
@@ -87,7 +98,7 @@ See [Development](docs/DEVELOPMENT.md) for build outputs, verification steps and
 | `poc/firefox-mv3/` | Manually verified reference PoC |
 | `apps/browser-extension/` | Shared WXT Firefox / Chrome implementation, basic manual A/B/A test passed |
 | `packages/core/` | Bootstrap transformation and tests |
-| `apps/desktop-patcher/` | Future Electron patcher |
+| `apps/desktop/` | Claude Desktop package config (installed with the `vendor/claude-desktop-webext` submodule) |
 | `docs/` | Research, troubleshooting, development and translations |
 
 ## Roadmap
@@ -98,7 +109,8 @@ See [Development](docs/DEVELOPMENT.md) for build outputs, verification steps and
 - [x] Validate basic split/restore flow of WXT Firefox in a real browser
 - [x] Validate basic split/restore flow of WXT Chrome in a real browser
 - [x] Add synthetic browser-engine regression tests (Chromium extension; Firefox generated script)
-- [ ] Design, implement and validate a reversible Desktop patcher
+- [x] Validate Claude Desktop (Windows) through the shared extension-slot loader
+- [ ] Validate Claude Desktop on Linux
 
 ## Community and license
 

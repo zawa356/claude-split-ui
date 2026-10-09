@@ -12,7 +12,7 @@
 はい。ChromeのWXT版は「パッケージ化されていない拡張機能を読み込む」方式で、分離表示と無効化後の統合UI復帰を簡易実機検証済みです。ただしChrome Web Storeにはまだ公開していません。
 
 ## Claude Desktopに対応していますか？
-まだ対応していません。復元可能なElectronパッチャーを計画しています。
+Windows版は対応しています（Claude 2.31226で簡易実機確認）。`claude-split-ui-<版>-desktop.zip` を [claude-desktop-webext](https://github.com/zawa356/claude-desktop-webext) ローダー経由で導入し、Claude本体は変更しません。Linux版も同じパッケージですが未確認です。
 
 ## トラブルシューティング
 
