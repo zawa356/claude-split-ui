@@ -27,7 +27,7 @@ pnpm run build:chrome
 
 ## Pull requests
 
-Describe the motivation, affected browsers, verification method and rollback. Preserve the original Firefox PoC as a known-good baseline. When changing public behavior, update both README translations and the FAQ as appropriate. Mark WXT runtime compatibility as **unverified** until a real browser test is recorded.
+Describe the motivation, affected browsers, verification method and rollback. Preserve the original Firefox PoC as a known-good baseline. When changing public behavior, update both README translations and the FAQ as appropriate. WXT Firefox and Chrome have passed a **basic real-browser split/restore smoke test**; do not overstate this as full-feature validation or perpetual compatibility.
 
 Use synthetic data for regression tests. The project does not accept proprietary Claude application archives, copied vendor source, or secrets.
 

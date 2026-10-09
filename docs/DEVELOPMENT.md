@@ -20,7 +20,7 @@ pnpm run build:firefox
 pnpm run build:chrome
 ```
 
-CI checks the generated MV3 manifest for the expected same-origin match, MAIN world and document_start. Build output is under `apps/browser-extension/.output/`. The WXT builds are **not yet browser validated**.
+CI checks the generated MV3 manifest for the expected same-origin match, MAIN world and document_start. Build output is under `apps/browser-extension/.output/`. Both WXT browser targets passed a basic real-browser split/restore smoke test. Synthetic CI tests supplement but do not replace full feature coverage.
 
 ## Architecture
 

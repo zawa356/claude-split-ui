@@ -30,10 +30,10 @@ CIの成功はブラウザ上の動作保証ではありません。最新状況
 
 ## クイックスタート：Firefox・Chrome
 
-両方のWXT版についてClaude Web上の簡易実機テストを実施し、拡張機能を有効にするとChat / Coworkが分離表示され、削除・無効化後の再読み込みで統合UIに戻ることを確認しました。**現段階は開発者向けの手動インストール方式です。**
+両方のWXT版について（v0.1.0開発時に）Claude Web上の簡易実機テストを実施し、拡張機能を有効にするとChat / Coworkが分離表示され、削除・無効化後の再読み込みで統合UIに戻ることを確認しました。**現段階は開発者向けの手動インストール方式です。**
 
-1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.1.0)を開きます。
-2. **Assets**から、Firefoxなら `claude-split-ui-0.1.0-firefox.zip`、Chromeなら `claude-split-ui-0.1.0-chrome.zip` をダウンロードします。
+1. [GitHub Releases](https://github.com/zawa356/claude-split-ui/releases/tag/v0.1.1)を開きます。
+2. **Assets**から、Firefoxなら `claude-split-ui-0.1.1-firefox.zip`、Chromeなら `claude-split-ui-0.1.0-chrome.zip` をダウンロードします。
 3. ZIPを展開し、展開先フォルダー直下に `manifest.json` と `content-scripts/` があることを確認します。
 4. **Firefox：** `about:debugging#/runtime/this-firefox` → **「一時的なアドオンを読み込む…」** → 展開済み拡張機能内の `manifest.json` を選択します。Firefoxを再起動すると一時アドオンは解除されます。
 5. **Chrome：** `chrome://extensions/` → **デベロッパーモード**を有効化 → **「パッケージ化されていない拡張機能を読み込む」** → `manifest.json` が直下にある**フォルダー**を選択します。
@@ -41,7 +41,7 @@ CIの成功はブラウザ上の動作保証ではありません。最新状況
 
 **元に戻す：** Firefoxは `about:debugging` で一時アドオンを削除。Chromeは `chrome://extensions/` でスイッチをOFFにするか削除。その後Claudeを再読み込みすると統合UIに戻ります。
 
-**注意：** Mozilla署名済みXPIやChrome Web Storeでの配布はまだありません。ZIPをXPIへリネームしてもMozilla署名は付与されません。実機で確認したのは分離・復帰の基本動作であり、全アカウント・全バージョン・Coworkの各機能を保証するものではありません。
+**注意：** Firefox AMO公開申請は準備済みですが、申請・承認はまだ行われていません。Mozilla署名済みXPIやChrome Web Storeでの配布はまだありません。ZIPをXPIへリネームしてもMozilla署名は付与されません。実機で確認したのは分離・復帰の基本動作であり、全アカウント・全バージョン・Coworkの各機能を保証するものではありません。
 
 WXT版で問題がある場合、旧来の[Firefox PoC](../../poc/firefox-mv3/README.md)も残しています。認証済みHARやbootstrapレスポンス原本はIssueに貼らないでください。
 
@@ -56,7 +56,7 @@ Claude Web → 同一オリジンのbootstrap fetch
 
 対象外の通信や未知のレスポンス形式は原則そのまま通します。テレメトリーや認証情報の収集・送信・保存は行いません。
 
-[技術資料](../research/wxt-migration.md) · [プライバシー](../PRIVACY.md)
+[技術資料](../research/wxt-migration.md) · [プライバシー](../PRIVACY.md) · [Firefox AMO公開準備](../amo/AMO.ja.md)
 
 ## 開発者向け
 
@@ -68,7 +68,7 @@ npm test
 npm run build:poc
 ```
 
-**実機未検証**のWXT版ビルド：
+**分離・復帰の基本動作を実機確認済み**のWXT版ビルド（広範な互換性は未検証）：
 
 ```sh
 corepack enable

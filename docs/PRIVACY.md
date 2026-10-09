@@ -2,10 +2,8 @@
 
 [English](PRIVACY.md) · [日本語](i18n/PRIVACY.ja.md)
 
-The original Firefox PoC does not add network requests, store data, or send telemetry. It intercepts a narrow, same-origin bootstrap fetch **inside your own browser**, modifies only two fields in a matching feature definition, and passes unrelated traffic through. It does not require additional extension permissions.
+The Firefox/Chrome WXT extension and earlier Firefox PoC run **locally inside your browser** and match only `https://claude.ai/*`. They wrap a narrow same-origin bootstrap `fetch` response, changing selected boolean values in one client-side UI feature definition. Requests and unrelated responses pass through. These extensions do not add background network requests, transmit telemetry, store response bodies, read or persist conversations, or collect account credentials.
 
-This is a source-code description, **not** an independent security audit. MAIN-world scripts share a page execution context, and the upstream application may change. Review the code and use at your own risk.
+The Firefox add-on declares `browser_specific_settings.gecko.data_collection_permissions.required: ["none"]`. No cookie, storage, or broad host extension permissions are requested. This describes the reviewed source code; **it is not an independent security audit**. MAIN-world scripts share the web page's execution context and Claude may change its behavior.
 
-We do not ask users to submit HAR archives, raw API responses, credentials, cookies, account identifiers or conversation contents. Do not attach such information to GitHub issues or pull requests.
-
-For security disclosures, consult [SECURITY.md](../SECURITY.md).
+Never post HAR archives, raw bootstrap API responses, account UUIDs, session cookies, credentials or private conversations to GitHub Issues/PRs. Consult [SECURITY.md](../SECURITY.md) for security reports.

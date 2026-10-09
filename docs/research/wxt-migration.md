@@ -8,15 +8,15 @@ The Firefox MV3 PoC in `poc/firefox-mv3/` was manually tested with Firefox 157.0
 
 `packages/core/src/index.mjs` performs a narrow, in-memory JSON transformation on the observed same-origin `/edge-api/bootstrap/.../app_start` endpoint. It changes only the feature definition keyed `1174351393`: `defaultValue` and boolean `rules[].force` to `false`. Tracking metadata, entitlements, cookies and other features are unchanged. Unexpected payloads pass through unmodified.
 
-`apps/browser-extension/` uses WXT, MV3, `document_start`, and MAIN world for both Firefox and Chrome. This is a migration candidate, not a browser-tested replacement for the proven Firefox PoC.
+`apps/browser-extension/` uses WXT, MV3, `document_start`, and MAIN world for both Firefox and Chrome. Both WXT variants passed a minimal real-browser split/restore observation (extension enabled → split UI; removed/disabled → unified UI after reload). This verifies the basic selector behavior only; it does not prove complete Cowork functionality or future compatibility.
 
-## Verification ladder
+## Verification ladder (status at v0.1.1 preparation)
 
 1. Run pure transformation unit tests with synthetic fixture data.
 2. Build Firefox and Chrome using GitHub Actions and inspect generated manifests.
 3. Confirm early injection in a synthetic browser harness; do not require a Claude login.
-4. Load WXT Firefox output temporarily, repeat the original A/B/A test.
-5. Load WXT Chrome output unpacked, repeat A/B/A.
+4. **Done:** Load WXT Firefox output temporarily, repeat the original A/B/A test.
+5. **Done:** Load WXT Chrome output unpacked, repeat A/B/A.
 6. Test feature absent, malformed bootstrap, non-200 HTTP, and future schema drift.
 
 A CI green build alone does not establish real browser behavior.

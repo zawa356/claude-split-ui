@@ -20,7 +20,7 @@ pnpm run build:firefox
 pnpm run build:chrome
 ```
 
-CIでは生成されたMV3マニフェストについて、同一オリジンの対象、MAIN world、document_startを検査します。WXTの出力は `apps/browser-extension/.output/` に生成されます。**WXT版の実機検証は未完了です。**
+CIでは生成されたMV3マニフェストについて、同一オリジンの対象、MAIN world、document_startを検査します。WXTの出力は `apps/browser-extension/.output/` に生成されます。**WXT版Firefox・Chromeは、分離表示と無効化後の統合UI復帰を実機で簡易確認済みです。** 合成データの自動テストは、全機能の動作保証ではありません。
 
 ## 構成
 

@@ -1,3 +1,5 @@
+> **Historical handoff (archive):** The branch and acceptance state below describe a past development phase. The current main branch contains both Firefox and Chrome WXT implementations, both basic real-browser tests passed, and the AMO pipeline is prepared but not yet submitted.
+
 # Development handoff
 
 Repository: `claude-split-ui`, branch `feat/wxt-extension`.
