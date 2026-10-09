@@ -31,7 +31,7 @@
 | releases | v0.1.0, v0.1.1 prerelease (GitHub Actions). assets claude-split-ui-0.1.1-{chrome,firefox}.zip + SHA256SUMS.txt. chrome zip = manifest.json + content-scripts/claude.js (self-contained IIFE, 1792B zip) V |
 | amo/ , docs/amo/ | AMO submission pipeline prepared, not submitted |
 | apps/desktop/ (was desktop-patcher) | desktop-webext.json {id claude-split-ui, order 10, source ../browser-extension/.output/chrome-mv3, tested windows 2.31226.0.0}. packaged by vendor/claude-desktop-webext/tools/package.mjs in ci.yml (artifact claude-desktop-package) + release.yml (asset claude-split-ui-<ver>-desktop.zip, in SHA256SUMS via scripts/stage-release.mjs). branch feat/desktop-webext |
-| vendor/claude-desktop-webext | git submodule (public repo, e39289f) |
+| vendor/claude-desktop-webext | git submodule (public repo, b46a222) |
 | docs/research/2026-10-09-desktop-poc.md | NEW: Desktop PoC report (A/B/A, loader mechanics) |
 | docs/desktop/shared-slot-spec.md | SUPERSEDED by loader SPEC (kept for history). was DRAFT v1 shared slot spec (layout modules/<id>/module.json, claude-slot.json host registry w/ env ownership, generated manifest, order split-ui=10 ctrl-enter=50, lock+staging+swap, migration by ctrl-enter>=0.4 only, old 0.3.x sees unknown -> refuses). awaiting user review; open: generator vendoring/canonical repo, Linux, enabled flag |
 
@@ -87,6 +87,7 @@
 - Desktop auto-updates may change loader chunk; need version check list like sibling TestedVersions.
 
 ## LOG (newest first)
+- 2026-10-09 | claude-opus-5-5 | session2m: bumped to 0.2.0 (user) + docs/releases/v0.2.0.md; submodule -> loader b46a222 (webext.sh checks python3 actually runs; Windows Store alias). ctrl-enter 0.4.0 PR zawa356/claude_ctrl-enter#1 opened from this session (loader-based install/migration).
 - 2026-10-09 | claude-opus-5-5 | session2l: user verified loader-based install on VM. branch feat/desktop-webext: submodule, apps/desktop config, CI/release packaging, README/FAQ en+ja Desktop sections, superseded notes. npm test + check-docs pass.
 - 2026-10-09 | claude-opus-5-5 | session2k: loader public; real VM install of ctrl-enter(adopt)+split-ui via loader; waiting for user restart.
 - 2026-10-09 | claude-opus-5-5 | session2j: built + pushed zawa356/claude-desktop-webext (private), CI green. found 8.3 short-path bug in PS copy via CI. integration blocked on loader visibility; real-VM test awaiting OK.
