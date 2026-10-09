@@ -1,0 +1,41 @@
+name: Browser engine smoke tests (synthetic)
+
+on:
+  push:
+    branches: [main, 'feat/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-smoke:
+    name: Synthetic runtime (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: chromium-extension
+            build: chrome
+            browser: chromium
+          - target: firefox-script
+            build: firefox
+            browser: firefox
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pnpm install --no-frozen-lockfile
+      - name: Build WXT for test
+        run: pnpm run build:${{ matrix.build }}
+      - name: Install Playwright browser
+        run: pnpm --filter @claude-split-ui/browser-extension exec playwright install --with-deps ${{ matrix.browser }}
+      - name: Run synthetic browser A/B/A
+        run: pnpm --filter @claude-split-ui/browser-extension exec node tests/browser-smoke.mjs ${{ matrix.target }}
