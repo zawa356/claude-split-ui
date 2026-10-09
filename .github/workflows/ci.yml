@@ -58,4 +58,5 @@ jobs:
         with:
           name: wxt-${{ matrix.browser }}-mv3-unverified
           path: apps/browser-extension/.output/claude-split-uibrowser-extension-0.1.0-${{ matrix.browser }}.zip
+          include-hidden-files: true
           if-no-files-found: error
